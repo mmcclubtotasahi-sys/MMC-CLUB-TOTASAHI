@@ -1,226 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MMC CLUB - Management System</title>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    
-    <style>
-        :root { --gold: #D4AF37; --dark: #121212; --card: #1e1e1e; --white: #ffffff; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--dark); color: var(--white); margin: 0; padding: 0; }
-        
-        /* Header */
-        .header { background: #000; padding: 20px; border-bottom: 3px solid var(--gold); text-align: center; }
-        .header h1 { margin: 0; color: var(--gold); font-size: 24px; letter-spacing: 2px; }
-        
-        /* Login Box */
-        .container { padding: 20px; max-width: 500px; margin: auto; }
-        .card { background: var(--card); border: 1px solid #333; padding: 20px; border-radius: 12px; margin-top: 20px; text-align: center; }
-        
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #444; background: #252525; color: white; font-size: 16px; box-sizing: border-box; }
-        
-        /* Buttons */
-        .btn { padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; width: 100%; margin-top: 10px; transition: 0.3s; }
-        .btn-gold { background: var(--gold); color: black; }
-        .btn-whatsapp { background: #25D366; color: white; }
-        .btn-edit { background: orange; color: white; width: auto; margin: 2px; }
-        .btn-delete { background: red; color: white; width: auto; margin: 2px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MMC CLUB</title>
 
-        /* Tabs */
-        .tab-bar { display: flex; justify-content: space-around; margin-top: 20px; background: #000; padding: 10px 0; position: sticky; top: 0; }
-        .tab-item { color: #888; cursor: pointer; font-weight: bold; padding: 10px; }
-        .tab-item.active { color: var(--gold); border-bottom: 2px solid var(--gold); }
+<!-- Firebase v9 Compat -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-        /* Table */
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: var(--card); }
-        th, td { border: 1px solid #333; padding: 10px; text-align: center; font-size: 13px; }
-        th { background: #252525; color: var(--gold); }
-        
-        #app-content { display: none; }
-    </style>
+<style>
+body {
+    margin:0;
+    font-family: Arial;
+    background:#0f0f0f;
+    color:white;
+}
+header {
+    background:#000;
+    padding:15px;
+    text-align:center;
+    color:#D4AF37;
+    font-size:20px;
+}
+.container { padding:15px; }
+
+input, button {
+    padding:10px;
+    margin:5px 0;
+    width:100%;
+    border:none;
+    border-radius:5px;
+}
+button {
+    background:#D4AF37;
+    color:black;
+    font-weight:bold;
+}
+
+.card {
+    background:#1c1c1c;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+table {
+    width:100%;
+    border-collapse: collapse;
+}
+th, td {
+    padding:8px;
+    border-bottom:1px solid #333;
+}
+th { color:#D4AF37; }
+
+.hidden { display:none; }
+
+.nav {
+    display:flex;
+    justify-content:space-around;
+    background:#000;
+    padding:10px;
+}
+.nav button {
+    width:auto;
+    padding:10px 20px;
+}
+
+@media(max-width:600px){
+    table { font-size:12px; }
+}
+</style>
 </head>
+
 <body>
 
-    <div id="login-section" class="container">
-        <div class="card">
-            <h2 style="color: var(--gold);">MMC CLUB LOGIN</h2>
-            <p>Official Digital Management App</p>
-            <input type="tel" id="mobileNumber" placeholder="Enter Mobile Number">
-            <button class="btn btn-whatsapp" onclick="sendWhatsAppOTP()">Get OTP on WhatsApp</button>
-            
-            <div id="otp-div" style="display:none; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
-                <input type="number" id="otpInput" placeholder="Enter 4-Digit OTP">
-                <button class="btn btn-gold" onclick="verifyOTP()">Verify & Login</button>
-            </div>
-        </div>
+<header>MMC CLUB</header>
+
+<div class="container">
+
+<!-- LOGIN -->
+<div id="loginBox">
+    <h3>Login</h3>
+    <input type="text" id="phone" placeholder="Enter Phone Number">
+    <button onclick="sendOTP()">Send OTP</button>
+
+    <div id="otpSection" class="hidden">
+        <input type="text" id="otp" placeholder="Enter OTP">
+        <button onclick="verifyOTP()">Verify</button>
+    </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="hidden">
+
+    <div class="nav">
+        <button onclick="showTab('dashboard')">Dashboard</button>
+        <button onclick="showTab('ledger')">My Ledger</button>
     </div>
 
-    <div id="app-content">
-        <div class="header">
-            <h1>MAA MANGALA CLUB</h1>
-            <p>Bagalpur, Jagatsinghpur</p>
+    <!-- DASHBOARD -->
+    <div id="dashboard">
+
+        <div id="formSection" class="card hidden">
+            <input type="text" id="name" placeholder="Name">
+            <input type="number" id="amount" placeholder="Amount">
+            <select id="type">
+                <option value="Expense">Expense</option>
+                <option value="Donation">Donation</option>
+            </select>
+            <button onclick="addRecord()">Save</button>
         </div>
 
-        <div class="tab-bar">
-            <div id="tab1" class="tab-item active" onclick="switchTab('dashboard')">Dashboard</div>
-            <div id="tab2" class="tab-item" onclick="switchTab('ledger')">My Ledger</div>
-            <div id="tab3" class="tab-item" onclick="switchTab('members')">Members</div>
-        </div>
-
-        <div class="container">
-            <div id="dashboard-view">
-                <h3>Club Expenses & Donations</h3>
-                <table id="main-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Description</th>
-                            <th>Amount</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="main-list"></tbody>
-                </table>
-            </div>
-
-            <div id="ledger-view" style="display:none;">
-                <h3>My Payment History</h3>
-                <table id="personal-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Purpose</th>
-                            <th>Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody id="personal-list"></tbody>
-                </table>
-            </div>
-        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Type</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="dataTable"></tbody>
+        </table>
     </div>
 
-    <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            databaseURL: "https://planning-with-ai-fa788-default-rtdb.firebaseio.com/"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+    <!-- LEDGER -->
+    <div id="ledger" class="hidden">
+        <h3>My Ledger</h3>
+        <div id="ledgerData"></div>
+    </div>
 
-        let generatedOTP;
-        let currentUserPhone = localStorage.getItem("userPhone");
-        let currentUserRole = localStorage.getItem("userRole") || "Member";
+</div>
 
-        // --- AUTHENTICATION ---
-        function sendWhatsAppOTP() {
-            const phone = document.getElementById('mobileNumber').value;
-            if(phone.length < 10) { alert("Enter valid 10-digit number"); return; }
-            
-            generatedOTP = Math.floor(1000 + Math.random() * 9000);
-            const msg = `MMC CLUB LOGIN OTP: ${generatedOTP}`;
-            const waURL = `https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`;
-            
-            alert("OTP generated! Open WhatsApp to view code.");
-            window.open(waURL, '_blank');
-            document.getElementById('otp-div').style.display = 'block';
-        }
+</div>
 
-        function verifyOTP() {
-            const inputOTP = document.getElementById('otpInput').value;
-            const phone = document.getElementById('mobileNumber').value;
+<script>
+// 🔥 Firebase Config (REPLACE THIS)
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  databaseURL: "YOUR_DB_URL",
+  projectId: "YOUR_ID",
+};
 
-            if(inputOTP == generatedOTP) {
-                localStorage.setItem("userPhone", phone);
-                // Assign President Role to your number
-                if(phone === "9937765417") localStorage.setItem("userRole", "President");
-                else if(phone === "your_manager_no") localStorage.setItem("userRole", "Manager");
-                else localStorage.setItem("userRole", "Member");
-                
-                location.reload();
-            } else {
-                alert("Invalid OTP!");
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// GLOBALS
+let generatedOTP = "";
+let userPhone = "";
+let role = "";
+
+// SEND OTP
+function sendOTP(){
+    userPhone = document.getElementById("phone").value;
+
+    if(userPhone.length !== 10){
+        alert("Enter valid number");
+        return;
+    }
+
+    generatedOTP = Math.floor(1000 + Math.random() * 9000);
+
+    let msg = `Your MMC CLUB OTP is: ${generatedOTP}`;
+    let url = `https://wa.me/91${userPhone}?text=${encodeURIComponent(msg)}`;
+
+    window.open(url, "_blank");
+
+    document.getElementById("otpSection").classList.remove("hidden");
+}
+
+// VERIFY OTP
+function verifyOTP(){
+    let entered = document.getElementById("otp").value;
+
+    if(entered == generatedOTP){
+        setupRole();
+        document.getElementById("loginBox").classList.add("hidden");
+        document.getElementById("app").classList.remove("hidden");
+        initApp();
+    } else {
+        alert("Wrong OTP");
+    }
+}
+
+// ROLE LOGIC
+function setupRole(){
+    if(userPhone === "9937765417"){
+        role = "President";
+    } else if(["9999999999","8888888888"].includes(userPhone)){
+        role = "Manager";
+    } else {
+        role = "Member";
+    }
+
+    if(role !== "Member"){
+        document.getElementById("formSection").classList.remove("hidden");
+    }
+}
+
+// ADD RECORD
+function addRecord(){
+    let name = document.getElementById("name").value;
+    let amount = document.getElementById("amount").value;
+    let type = document.getElementById("type").value;
+
+    db.ref("records").push({
+        name,
+        amount,
+        type,
+        phone: userPhone
+    });
+}
+
+// LOAD DATA
+function initApp(){
+    db.ref("records").on("value", snap=>{
+        let data = snap.val();
+        let html = "";
+        let ledgerHtml = "";
+
+        for(let id in data){
+            let d = data[id];
+
+            // Dashboard
+            html += `
+            <tr>
+                <td>${d.name}</td>
+                <td>${d.amount}</td>
+                <td>${d.type}</td>
+                <td>
+                    ${getActions(id)}
+                </td>
+            </tr>`;
+
+            // Personal Ledger
+            if(d.phone === userPhone){
+                ledgerHtml += `
+                <div class="card">
+                    ${d.name} - ₹${d.amount} (${d.type})
+                </div>`;
             }
         }
 
-        // --- TAB NAVIGATION ---
-        function switchTab(view) {
-            document.getElementById('dashboard-view').style.display = view === 'dashboard' ? 'block' : 'none';
-            document.getElementById('ledger-view').style.display = view === 'ledger' ? 'block' : 'none';
-            
-            document.getElementById('tab1').className = view === 'dashboard' ? 'tab-item active' : 'tab-item';
-            document.getElementById('tab2').className = view === 'ledger' ? 'tab-item active' : 'tab-item';
-            
-            if(view === 'ledger') loadPersonalLedger();
-        }
+        document.getElementById("dataTable").innerHTML = html;
+        document.getElementById("ledgerData").innerHTML = ledgerHtml;
+    });
+}
 
-        // --- DATA LOAD ---
-        function loadDashboard() {
-            db.ref('records').on('value', (snapshot) => {
-                const list = document.getElementById('main-list');
-                list.innerHTML = "";
-                snapshot.forEach((child) => {
-                    const data = child.val();
-                    const id = child.key;
-                    let actions = "";
+// ACTION BUTTONS
+function getActions(id){
+    if(role === "President"){
+        return `
+        <button onclick="editRecord('${id}')">Edit</button>
+        <button onclick="deleteRecord('${id}')">Delete</button>`;
+    }
 
-                    // Manager/Secretary/President can Edit
-                    if(["President", "Manager", "Secretary"].includes(currentUserRole)) {
-                        actions += `<button class="btn-edit" onclick="editEntry('${id}')">Edit</button>`;
-                    }
-                    // ONLY President can Delete
-                    if(currentUserRole === "President") {
-                        actions += `<button class="btn-delete" onclick="deleteEntry('${id}')">Delete</button>`;
-                    }
+    if(role === "Manager"){
+        return `<button onclick="editRecord('${id}')">Edit</button>`;
+    }
 
-                    list.innerHTML += `<tr>
-                        <td>${data.date || 'N/A'}</td>
-                        <td>${data.desc}</td>
-                        <td>₹${data.amount}</td>
-                        <td>${actions}</td>
-                    </tr>`;
-                });
-            });
-        }
+    return "";
+}
 
-        function loadPersonalLedger() {
-            db.ref('payments').orderByChild('phone').equalTo(currentUserPhone).on('value', (snapshot) => {
-                const list = document.getElementById('personal-list');
-                list.innerHTML = "";
-                snapshot.forEach((child) => {
-                    const data = child.val();
-                    list.innerHTML += `<tr>
-                        <td>${data.date}</td>
-                        <td>${data.purpose}</td>
-                        <td>₹${data.amount}</td>
-                    </tr>`;
-                });
-            });
-        }
+// DELETE
+function deleteRecord(id){
+    db.ref("records/"+id).remove();
+}
 
-        // --- ADMIN ACTIONS ---
-        function editEntry(id) {
-            const newAmt = prompt("Enter New Amount:");
-            if(newAmt) {
-                db.ref('records/' + id).update({ amount: newAmt });
-                alert("Updated!");
-            }
-        }
+// EDIT
+function editRecord(id){
+    let newAmount = prompt("Enter new amount");
+    if(newAmount){
+        db.ref("records/"+id).update({amount:newAmount});
+    }
+}
 
-        function deleteEntry(id) {
-            if(confirm("Are you sure you want to delete this record?")) {
-                db.ref('records/' + id).remove();
-                alert("Deleted!");
-            }
-        }
+// TABS
+function showTab(tab){
+    document.getElementById("dashboard").classList.add("hidden");
+    document.getElementById("ledger").classList.add("hidden");
 
-        // Auto Login Check
-        if(currentUserPhone) {
-            document.getElementById('login-section').style.display = 'none';
-            document.getElementById('app-content').style.display = 'block';
-            loadDashboard();
-        }
-    </script>
+    document.getElementById(tab).classList.remove("hidden");
+}
+</script>
+
 </body>
 </html>
