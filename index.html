@@ -3,68 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MMC CLUB - DIGITAL MANAGEMENT</title>
+    <title>MMC CLUB | Professional Ledger</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #D4AF37; --dark: #000000; --card: #1a1a1a; }
-        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; padding: 0; }
-        .container { padding: 20px; max-width: 500px; margin: auto; }
-        .card { background: var(--card); border: 1px solid var(--gold); padding: 30px; border-radius: 15px; margin-top: 50px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); }
-        input { width: 100%; padding: 12px; margin: 15px 0; border-radius: 8px; border: 1px solid #444; background: #222; color: white; box-sizing: border-box; font-size: 16px; }
-        .btn-gold { background: var(--gold); color: black; font-weight: bold; width: 100%; padding: 12px; cursor: pointer; border: none; border-radius: 8px; font-size: 16px; transition: 0.3s; }
-        .btn-gold:hover { background: #b8952d; }
-        #app-content { display: none; }
-        .tabs { display: flex; background: #111; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 10; }
-        .tab-item { flex: 1; padding: 15px; cursor: pointer; color: #888; font-weight: bold; }
-        .tab-item.active { color: var(--gold); border-bottom: 3px solid var(--gold); }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #111; }
-        th, td { border: 1px solid #333; padding: 12px; text-align: center; font-size: 14px; }
-        th { background: #222; color: var(--gold); }
+        :root { 
+            --gold-grad: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7);
+            --dark-bg: #0a0a0a;
+            --card-bg: #141414;
+        }
+        body { 
+            background: var(--dark-bg); color: #fff; font-family: 'Poppins', sans-serif; 
+            text-align: center; margin: 0; padding: 0; 
+        }
+        .container { padding: 20px; max-width: 450px; margin: auto; }
+        
+        /* Stylish Card */
+        .card { 
+            background: var(--card-bg); border: 1px solid #333; padding: 40px 30px; 
+            border-radius: 20px; margin-top: 60px; 
+            box-shadow: 0 10px 30px rgba(191, 149, 63, 0.1);
+        }
+        
+        /* Gold Text Effect */
+        .gold-text { 
+            background: var(--gold-grad); -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; margin-bottom: 5px; 
+            font-weight: 700; letter-spacing: 1px;
+        }
+        
+        /* Modern Inputs */
+        input { 
+            width: 100%; padding: 15px; margin: 15px 0; border-radius: 10px; 
+            border: 1px solid #333; background: #000; color: #fff; 
+            box-sizing: border-box; font-size: 15px; font-family: 'Poppins', sans-serif;
+            transition: 0.3s;
+        }
+        input:focus { border-color: #BF953F; outline: none; box-shadow: 0 0 10px rgba(191,149,63,0.2); }
+        
+        /* Premium Buttons */
+        .btn-gold { 
+            background: var(--gold-grad); color: #000; font-weight: 600; 
+            width: 100%; padding: 15px; cursor: pointer; border: none; 
+            border-radius: 10px; font-size: 16px; text-transform: uppercase; 
+            letter-spacing: 1px; transition: 0.3s; margin-top: 10px;
+        }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(191,149,63,0.3); }
+        
+        /* Dashboard Elements */
+        #dashboard { display: none; padding-top: 30px; }
+        .header-box { background: var(--card-bg); padding: 20px; border-bottom: 2px solid #BF953F; }
+        .badge { background: #222; border: 1px solid #BF953F; color: #FCF6BA; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 15px; }
+        
+        /* Professional Table */
+        table { width: 100%; border-collapse: collapse; margin-top: 25px; background: var(--card-bg); border-radius: 10px; overflow: hidden; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #222; font-size: 14px; }
+        th { background: #111; color: #BF953F; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+        td:last-child { font-weight: 600; color: #FCF6BA; text-align: right; }
+        th:last-child { text-align: right; }
+        
+        .btn-logout { background: #222; border: 1px solid #ff4d4d; color: #ff4d4d; margin-top: 30px; border-radius: 10px; }
+        .btn-logout:hover { background: #ff4d4d; color: #fff; }
     </style>
 </head>
 <body>
 
-    <div id="login-section" class="container">
+    <div id="login-area" class="container">
         <div class="card">
-            <h2 style="color: var(--gold); margin-bottom: 5px;">MMC CLUB</h2>
-            <p style="color: #888; margin-bottom: 20px;">Management System v4.0</p>
-            <input type="tel" id="mobileInput" placeholder="Enter Mobile Number">
-            <button class="btn-gold" onclick="generateScreenOTP()">GENERATE OTP</button>
+            <h1 class="gold-text">MMC CLUB</h1>
+            <p style="color: #777; font-size: 13px; margin-bottom: 25px;">Secure Digital Ledger</p>
             
-            <div id="otp-area" style="display:none; margin-top: 25px; border-top: 1px solid #333; padding-top: 20px;">
-                <p style="color: #D4AF37; font-weight: bold;" id="otp-display"></p>
-                <input type="number" id="verifyInput" placeholder="Enter the OTP shown above">
-                <button class="btn-gold" onclick="loginUser()">VERIFY & LOGIN</button>
+            <input type="tel" id="mobileInput" placeholder="Enter Mobile Number" maxlength="10">
+            <button class="btn-gold" onclick="generateOTP()">Get OTP</button>
+            
+            <div id="otp-section" style="display:none; margin-top: 25px; padding-top: 20px; border-top: 1px solid #222;">
+                <div id="otp-display" style="color: #FCF6BA; font-size: 22px; font-weight: 700; letter-spacing: 4px; margin-bottom: 15px;"></div>
+                <input type="number" id="otpInput" placeholder="Enter 4-Digit OTP">
+                <button class="btn-gold" onclick="login()">Secure Login</button>
             </div>
         </div>
     </div>
 
-    <div id="app-content">
-        <div style="background: #000; padding: 20px; border-bottom: 2px solid var(--gold);">
-            <h2 style="color: var(--gold); margin: 0;">MMC CLUB DASHBOARD</h2>
+    <div id="dashboard">
+        <div class="header-box">
+            <h2 class="gold-text" style="margin: 0 0 10px 0;">MMC CLUB</h2>
+            <div class="badge" id="userRoleDisplay"></div>
         </div>
         
-        <div class="tabs">
-            <div id="t1" class="tab-item active" onclick="switchTab('all')">ALL RECORDS</div>
-            <div id="t2" class="tab-item" onclick="switchTab('mine')">MY PAYMENTS</div>
-        </div>
-
         <div class="container">
-            <div id="all-view">
-                <h3>Global Transactions</h3>
-                <table>
-                    <thead><tr><th>Details</th><th>Amount</th></tr></thead>
-                    <tbody id="global-list"></tbody>
-                </table>
-            </div>
-
-            <div id="mine-view" style="display:none;">
-                <h3>My Ledger History</h3>
-                <table>
-                    <thead><tr><th>Date</th><th>Amount</th></tr></thead>
-                    <tbody id="personal-list"></tbody>
-                </table>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                <h3 style="margin: 0; font-size: 18px; color: #ccc;">Recent Transactions</h3>
             </div>
             
-            <button class="btn-gold" style="margin-top: 40px; background: #444; color
+            <table>
+                <thead>
+                    <tr><th>Description</th><th>Amount</th></tr>
+                </thead>
+                <tbody id="records-list"></tbody>
+            </table>
+
+            <button class="btn-gold btn-logout" onclick="logout()">Sign Out</button>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Setup
+        const firebaseConfig = { databaseURL: "https://planning-with-ai-fa788-default-rtdb.firebaseio.com/" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let currentOTP;
+
+        function generateOTP() {
+            const phone = document.getElementById('mobileInput').value;
+            if(phone.length !== 10) { alert("Please enter exactly 10 digits."); return; }
+            
+            currentOTP = Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('otp-display').innerText = currentOTP;
+            document.getElementById('otp-section').style.display = 'block';
+        }
+
+        function login() {
+            const enteredOTP = document.getElementById('otpInput').value;
+            const phone = document.getElementById('mobileInput').value;
+
+            if(enteredOTP == currentOTP) {
+                localStorage.setItem("mmc_user", phone);
+                if(phone === "9937765417") localStorage.setItem("mmc_role", "President");
+                else localStorage.setItem("mmc_role", "Member");
+                
+                location.reload();
+            } else {
+                alert("Incorrect OTP. Please check the code shown above.");
+            }
+        }
+
+        window.onload = function() {
+            const loggedUser = localStorage.getItem("mmc_user");
+            if(loggedUser) {
+                document.getElementById('login-area').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                
+                const role = localStorage.getItem("mmc_role");
+                document.getElementById('userRoleDisplay').innerText = role + " | " + loggedUser;
+                
+                loadData();
+            }
+        }
+
+        function loadData() {
+            db.ref('records').on('value', (snap) => {
+                const list = document.getElementById('records-list');
+                list.innerHTML = "";
+                let hasData = false;
+                
+                snap.forEach((child) => {
+                    hasData = true;
+                    const d = child.val();
+                    list.innerHTML += `<tr><td>${d.desc}</td><td>₹${d.amount}</td></tr>`;
+                });
+                
+                if(!hasData) {
+                    list.innerHTML = "<tr><td colspan='2' style='text-align:center; color:#777; padding: 30px;'>No records found in database.</td></tr>";
+                }
+            });
+        }
+
+        function logout() {
+            localStorage.clear();
+            location.reload();
+        }
+    </script>
+</body>
+</html>
