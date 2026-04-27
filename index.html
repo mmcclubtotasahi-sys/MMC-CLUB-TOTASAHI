@@ -3,53 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAA MANGALA CLUB | Secure Ledger</title>
+    <title>MAA MANGALA CLUB | Pro Ledger</title>
     <link rel="icon" href="3d-1.png" type="image/png">
+    
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        :root { --gold: #D4AF37; --gold-grad: linear-gradient(135deg, #D4AF37, #FFF2CD, #AA8222); --dark: #080808; --card: #121212; }
-        body { background: var(--dark); color: #fff; font-family: 'Poppins', sans-serif; text-align: center; margin: 0; padding: 0; }
-        .container { padding: 15px; max-width: 600px; margin: auto; }
-        .card { background: var(--card); border: 1px solid #222; padding: 30px; border-radius: 16px; margin-top: 30px; box-shadow: 0 8px 32px rgba(212, 175, 55, 0.05); }
-        .app-logo { width: 110px; filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.8)); margin-bottom: 5px; }
-        .gold-text { background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; margin: 5px 0; letter-spacing: 1px; }
-        input, select { width: 100%; padding: 14px; margin: 8px 0; border-radius: 8px; border: 1px solid #333; background: #0a0a0a; color: #fff; box-sizing: border-box; font-family: 'Poppins', sans-serif; font-size: 14px; transition: 0.3s; }
-        input:focus, select:focus { border-color: var(--gold); outline: none; }
-        .btn-gold { background: var(--gold-grad); color: #000; font-weight: 700; width: 100%; padding: 14px; cursor: pointer; border: none; border-radius: 8px; font-size: 15px; text-transform: uppercase; margin-top: 15px; transition: 0.3s; letter-spacing: 1px; }
-        .tab-box { display: flex; border-bottom: 1px solid #333; margin-bottom: 25px; }
-        .tab-btn { flex: 1; padding: 12px; cursor: pointer; color: #666; font-weight: 600; border-bottom: 3px solid transparent; font-size: 11px; transition: 0.3s; text-transform: uppercase; }
-        .tab-btn.active { color: var(--gold); border-bottom: 3px solid var(--gold); }
+        /* PRO THEME VARIABLES */
+        :root { 
+            --gold: #D4AF37; 
+            --gold-grad: linear-gradient(135deg, #D4AF37 0%, #FFF2CD 50%, #AA8222 100%); 
+            --dark-bg: #050505; 
+            --card-bg: rgba(18, 18, 18, 0.85); 
+            --glass-border: rgba(212, 175, 55, 0.2);
+            --danger: #ff4d4d;
+            --success: #4ade80;
+        }
+        
+        body { background: var(--dark-bg); color: #fff; font-family: 'Poppins', sans-serif; text-align: center; margin: 0; padding: 0; background-image: radial-gradient(circle at 50% 0%, #1a1500 0%, transparent 70%); min-height: 100vh; }
+        .container { padding: 15px; max-width: 650px; margin: auto; }
+        
+        /* Glassmorphism Cards */
+        .card { background: var(--card-bg); border: 1px solid var(--glass-border); padding: 35px 25px; border-radius: 20px; margin-top: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
+        .app-logo { width: 120px; filter: drop-shadow(0px 5px 15px rgba(212, 175, 55, 0.3)); margin-bottom: 10px; transition: transform 0.3s; }
+        .app-logo:hover { transform: scale(1.05); }
+        .gold-text { background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; margin: 5px 0; letter-spacing: 1.5px; }
+        
+        /* Inputs & Buttons */
+        input, select { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid #333; background: rgba(0,0,0,0.6); color: #fff; box-sizing: border-box; font-family: 'Poppins', sans-serif; font-size: 14px; transition: all 0.3s ease; }
+        input:focus, select:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 15px rgba(212, 175, 55, 0.15); background: #000; }
+        
+        .btn-gold { background: var(--gold-grad); color: #000; font-weight: 700; width: 100%; padding: 15px; cursor: pointer; border: none; border-radius: 10px; font-size: 15px; text-transform: uppercase; margin-top: 15px; transition: all 0.3s ease; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); }
+        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4); }
+        .btn-gold:active { transform: translateY(0); }
+        
+        /* Navigation Tabs */
+        .tab-box { display: flex; border-bottom: 1px solid #333; margin-bottom: 25px; background: rgba(0,0,0,0.3); border-radius: 10px 10px 0 0; overflow: hidden; }
+        .tab-btn { flex: 1; padding: 15px 10px; cursor: pointer; color: #777; font-weight: 600; border-bottom: 3px solid transparent; font-size: 12px; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        .tab-btn:hover { background: rgba(255,255,255,0.02); }
+        .tab-btn.active { color: var(--gold); border-bottom: 3px solid var(--gold); background: rgba(212, 175, 55, 0.05); }
+        
         .form-section { display: none; }
-        .form-section.active { display: block; animation: fadeIn 0.5s ease; }
+        .form-section.active { display: block; animation: fadeInUp 0.4s ease forwards; }
+        
+        /* Dashboard Header */
         #dashboard { display: none; }
-        .header-box { background: var(--card); padding: 20px 15px; border-bottom: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; gap: 15px; }
-        .badge { background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold); color: #FFF2CD; padding: 6px 16px; border-radius: 30px; font-size: 12px; font-weight: 600; display: inline-block; }
-        .fy-banner { background: #1a1500; border: 1px solid var(--gold); padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin: 20px 0; }
-        .fy-banner h3 { margin: 0; font-size: 15px; color: var(--gold); text-transform: uppercase; }
-        .fy-banner select { width: auto; padding: 8px 15px; margin: 0; background: #000; border: 1px solid var(--gold); color: var(--gold); font-weight: bold; border-radius: 6px; }
+        .header-box { background: var(--card-bg); padding: 15px 20px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; gap: 15px; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(15px); }
+        .badge { background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold); color: #FFF2CD; padding: 5px 15px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; letter-spacing: 0.5px; }
+        
+        /* Financial Year Banner */
+        .fy-banner { background: linear-gradient(90deg, rgba(26,21,0,0.8) 0%, rgba(10,10,10,0.9) 100%); border: 1px solid var(--glass-border); padding: 15px 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .fy-banner h3 { margin: 0; font-size: 14px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
+        .fy-banner select { width: auto; padding: 8px 15px; margin: 0; background: #000; border: 1px solid var(--gold); color: var(--gold); font-weight: bold; border-radius: 8px; cursor: pointer; }
+
+        /* Summary Dashboard */
         .summary-container { display: flex; gap: 12px; margin-bottom: 25px; }
-        .sum-box { background: #111; padding: 20px 10px; border-radius: 12px; flex: 1; border: 1px solid #222; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
-        .sum-box h4 { margin: 0 0 8px 0; font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-        .sum-box .amt { font-size: 18px; font-weight: 700; }
-        .text-inc { color: #4ade80; } .text-exp { color: #f87171; } .text-bal { color: var(--gold); }
-        table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 10px; background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #222; }
-        th, td { padding: 15px 12px; text-align: left; border-bottom: 1px solid #1a1a1a; font-size: 13px; }
-        th { background: #0a0a0a; color: #888; text-transform: uppercase; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; border-bottom: 1px solid #333; }
-        .type-badge { padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; }
-        .bg-inc { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
-        .bg-exp { background: rgba(248, 113, 113, 0.15); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.3); }
-        .cat-badge { background: #222; color: #ccc; padding: 3px 8px; border-radius: 4px; font-size: 10px; margin-left: 6px; border: 1px solid #444; }
-        .time-txt { font-size: 11px; color: #777; display: block; margin-top: 6px; }
-        .action-flex { display: flex; gap: 5px; flex-wrap: wrap; }
-        .btn-sm { padding: 6px 12px; font-size: 11px; border-radius: 6px; cursor: pointer; border: none; font-weight: 600; flex: 1; transition: 0.2s; }
-        .btn-del { background: rgba(248, 113, 113, 0.1); color: #f87171; border: 1px solid #f87171; }
-        .btn-pdf { background: rgba(212, 175, 55, 0.1); color: var(--gold); border: 1px solid var(--gold); }
-        .btn-wa { background: rgba(37, 211, 102, 0.1); color: #25D366; border: 1px solid #25D366; }
-        .admin-panel { background: #0d0d0d; border: 1px solid #333; padding: 20px; border-radius: 12px; margin-bottom: 25px; display: none; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .sum-box { background: rgba(10,10,10,0.8); padding: 20px 10px; border-radius: 15px; flex: 1; border: 1px solid #222; box-shadow: inset 0 2px 10px rgba(255,255,255,0.02); transition: 0.3s; }
+        .sum-box:hover { transform: translateY(-3px); border-color: #333; }
+        .sum-box h4 { margin: 0 0 8px 0; font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .sum-box .amt { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
+        .text-inc { color: var(--success); } .text-exp { color: var(--danger); } .text-bal { color: var(--gold); }
+
+        /* Pro Data Tables */
+        .table-responsive { overflow-x: auto; border-radius: 12px; border: 1px solid #222; background: rgba(15,15,15,0.9); }
+        table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+        th, td { padding: 16px 15px; text-align: left; border-bottom: 1px solid #1a1a1a; font-size: 13px; }
+        th { background: #050505; color: #999; text-transform: uppercase; font-size: 10px; font-weight: 600; letter-spacing: 1px; position: sticky; top: 0; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(255,255,255,0.02); }
+        
+        /* Badges */
+        .type-badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; display: inline-block; }
+        .bg-inc { background: rgba(74, 222, 128, 0.1); color: var(--success); border: 1px solid rgba(74, 222, 128, 0.2); }
+        .bg-exp { background: rgba(248, 113, 113, 0.1); color: var(--danger); border: 1px solid rgba(248, 113, 113, 0.2); }
+        .cat-badge { background: #222; color: #ddd; padding: 4px 8px; border-radius: 6px; font-size: 10px; margin-left: 6px; border: 1px solid #444; display: inline-block; }
+        .time-txt { font-size: 11px; color: #666; display: block; margin-top: 8px; font-weight: 500; }
+        
+        /* Action Buttons */
+        .action-flex { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn-sm { padding: 8px 12px; font-size: 11px; border-radius: 8px; cursor: pointer; border: none; font-weight: 600; flex: 1; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-sm:hover { filter: brightness(1.2); transform: scale(1.02); }
+        .btn-sm:active { transform: scale(0.95); }
+        .btn-edit { background: rgba(255, 165, 0, 0.15); color: #ffa500; border: 1px solid rgba(255, 165, 0, 0.3); }
+        .btn-del { background: rgba(248, 113, 113, 0.15); color: var(--danger); border: 1px solid rgba(248, 113, 113, 0.3); }
+        .btn-pdf { background: rgba(212, 175, 55, 0.15); color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.3); }
+        .btn-wa { background: rgba(37, 211, 102, 0.15); color: #25D366; border: 1px solid rgba(37, 211, 102, 0.3); }
+        
+        /* Admin Panels */
+        .admin-panel { background: rgba(0,0,0,0.4); border: 1px solid #333; padding: 25px 20px; border-radius: 15px; margin-bottom: 30px; display: none; box-shadow: inset 0 0 30px rgba(0,0,0,0.5); }
+        .mem-tot { font-size: 11px; color: #999; line-height: 1.8; }
+        .val-ghara { color: var(--gold); font-weight: 600; font-size: 12px; }
+        .val-mem { color: var(--success); font-weight: 600; font-size: 12px; }
+        
+        /* Animations */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -58,104 +108,159 @@
         <div class="card">
             <img id="logo-img" src="3d-1.png" alt="MMC Logo" class="app-logo" onerror="this.style.display='none'">
             <h1 class="gold-text">MAA MANGALA CLUB</h1>
-            <p style="color: #666; font-size: 12px; margin-bottom: 25px; letter-spacing: 1px;">SECURE DIGITAL LEDGER</p>
+            <p style="color: #777; font-size: 11px; margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase;">Secure Financial Ledger</p>
+            
             <div class="tab-box">
-                <div id="tab-mem" class="tab-btn active" onclick="switchLogin('member')">MEMBER</div>
-                <div id="tab-adm" class="tab-btn" onclick="switchLogin('admin')">ADMINISTRATION</div>
+                <div id="tab-mem" class="tab-btn active" onclick="switchLogin('member')">Members</div>
+                <div id="tab-adm" class="tab-btn" onclick="switchLogin('admin')">Administration</div>
             </div>
+
             <div id="form-member" class="form-section active">
-                <input type="tel" id="memPhone" placeholder="Enter Registered Mobile No." maxlength="10">
-                <button class="btn-gold" onclick="requestOTP()">GENERATE OTP</button>
-                <div id="otp-section" style="display:none; margin-top: 20px;">
-                    <div id="otp-display" style="color: var(--gold); font-size: 24px; font-weight: 700; letter-spacing: 5px; margin-bottom: 15px;"></div>
-                    <input type="number" id="memOtp" placeholder="Enter OTP">
-                    <button class="btn-gold" onclick="verifyMemberLogin()">VERIFY & PROCEED</button>
+                <p style="font-size: 11px; color: #888; margin-bottom: 15px;">Access restricted to verified club members.</p>
+                <input type="tel" id="memPhone" placeholder="Registered Mobile Number" maxlength="10">
+                <button class="btn-gold" onclick="requestOTP()">Generate Secure OTP</button>
+                
+                <div id="otp-section" style="display:none; margin-top: 25px; padding-top: 20px; border-top: 1px solid #222;">
+                    <p style="font-size: 10px; color: #666; margin:0 0 5px 0;">YOUR ONE-TIME PASSWORD</p>
+                    <div id="otp-display" style="color: var(--gold); font-size: 28px; font-weight: 700; letter-spacing: 8px; margin-bottom: 15px; text-shadow: 0 0 10px rgba(212,175,55,0.3);"></div>
+                    <input type="number" id="memOtp" placeholder="Enter 4-Digit OTP here">
+                    <button class="btn-gold" onclick="verifyMemberLogin()">Verify & Proceed</button>
                 </div>
             </div>
+
             <div id="form-admin" class="form-section">
+                <p style="font-size: 11px; color: #888; margin-bottom: 15px;">President / Secretary / Manager Portal</p>
                 <input type="tel" id="admPhone" placeholder="Admin Mobile Number" maxlength="10">
                 <input type="password" id="admPass" placeholder="Security Password">
-                <button class="btn-gold" onclick="adminLogin()">SECURE LOGIN</button>
+                <button class="btn-gold" onclick="adminLogin()">Authenticate</button>
             </div>
         </div>
     </div>
 
     <div id="dashboard">
         <div class="header-box">
-            <img src="3d-1.png" alt="Logo" style="width: 50px;" onerror="this.style.display='none'">
+            <img src="3d-1.png" alt="Logo" style="width: 45px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));" onerror="this.style.display='none'">
             <div style="text-align: left;">
-                <h2 class="gold-text" style="font-size: 18px; margin: 0;">MAA MANGALA CLUB</h2>
-                <div class="badge" id="userRoleDisplay" style="margin-top: 5px;"></div>
+                <h2 class="gold-text" style="font-size: 16px; margin: 0; letter-spacing: 1px;">MAA MANGALA CLUB</h2>
+                <div class="badge" id="userRoleDisplay" style="margin-top: 4px;"></div>
             </div>
         </div>
+        
         <div class="container">
-            <div id="admin-controls" style="display:none; margin-bottom: 20px;">
-                <div class="tab-box" style="margin-bottom: 15px;">
-                    <div id="tab-ledger" class="tab-btn active" onclick="switchAdminTab('ledger')">📝 ENTRY</div>
-                    <div id="tab-users" class="tab-btn" onclick="switchAdminTab('users')">👥 MEMBERS</div>
-                    <div id="tab-deleted" class="tab-btn" style="display:none;" onclick="switchAdminTab('deleted')">🗑️ TRASH</div>
+            
+            <div id="admin-controls" style="display:none; margin-bottom: 25px; margin-top: 10px;">
+                <div class="tab-box" style="margin-bottom: 20px; border-radius: 12px; background: rgba(20,20,20,0.8); border: 1px solid #222;">
+                    <div id="tab-ledger" class="tab-btn active" onclick="switchAdminTab('ledger')">📝 Entry</div>
+                    <div id="tab-users" class="tab-btn" onclick="switchAdminTab('users')">👥 Members</div>
+                    <div id="tab-deleted" class="tab-btn" style="display:none;" onclick="switchAdminTab('deleted')">🗑️ Trash</div>
                 </div>
+
                 <div id="admin-ledger" class="admin-panel active" style="display:block;">
-                    <select id="typeInput" onchange="toggleAddForm()">
-                        <option value="income">Income / ଆୟ (Credit)</option>
-                        <option value="expense">Expense / ବ୍ୟୟ (Debit)</option>
+                    <select id="typeInput" onchange="toggleAddForm()" style="font-weight: 600;">
+                        <option value="income">INCOME / ଆୟ (Credit)</option>
+                        <option value="expense">EXPENSE / ବ୍ୟୟ (Debit)</option>
                     </select>
+                    
                     <div id="inc-form">
-                        <select id="incomeCategory">
+                        <select id="incomeCategory" style="border-color: rgba(212,175,55,0.4);">
                             <option value="ଘର ଚାନ୍ଦା (House Chanda)">🏠 ଘର ଚାନ୍ଦା (House Chanda)</option>
                             <option value="ମେମ୍ବର ଚାନ୍ଦା (Member Chanda)">👤 ମେମ୍ବର ଚାନ୍ଦା (Member Chanda)</option>
                             <option value="ଅନ୍ୟାନ୍ୟ ଦାନ (Other Donation)">🎁 ଅନ୍ୟାନ୍ୟ ଦାନ (Other Donation)</option>
                         </select>
-                        <select id="memberSelect" onchange="checkGuest()"><option value="guest">Other / Non-Member</option></select>
-                        <input type="text" id="guestInput" placeholder="ଦାନକର୍ତ୍ତାଙ୍କ ନାମ (Name)">
+                        <select id="memberSelect" onchange="checkGuest()">
+                            <option value="guest">Guest / Non-Member</option>
+                        </select>
+                        <input type="text" id="guestInput" placeholder="ଦାନକର୍ତ୍ତାଙ୍କ ନାମ (Donor Name)">
                     </div>
-                    <div id="exp-form" style="display:none;"><input type="text" id="descInput" placeholder="ଖର୍ଚ୍ଚ ବିବରଣୀ (Expense Purpose)"></div>
-                    <input type="number" id="amtInput" placeholder="Amount (₹)">
-                    <button class="btn-gold" style="padding: 12px;" onclick="addRecord()">SAVE TO LEDGER</button>
+                    
+                    <div id="exp-form" style="display:none;">
+                        <input type="text" id="descInput" placeholder="କେଉଁ ଉଦ୍ଦେଶ୍ୟରେ ଖର୍ଚ୍ଚ ହେଲା (Expense Purpose)">
+                    </div>
+
+                    <input type="number" id="amtInput" placeholder="Amount / ଟଙ୍କା (₹)" style="font-size: 18px; font-weight: bold; color: var(--gold);">
+                    <button class="btn-gold" style="padding: 15px; font-size: 14px;" onclick="addRecord()">SAVE TRANSACTION</button>
                 </div>
+
                 <div id="admin-users" class="admin-panel">
+                    <h3 style="color: var(--gold); font-size: 13px; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 1px;">Register New Member</h3>
                     <input type="text" id="newMemName" placeholder="Full Name">
-                    <input type="tel" id="newMemPhone" placeholder="Mobile Number" maxlength="10">
-                    <button class="btn-gold" style="background: #25D366; color:#fff;" onclick="addMember()">ADD MEMBER</button>
-                    <table id="members-table"><tbody id="members-list"></tbody></table>
+                    <input type="tel" id="newMemPhone" placeholder="10-Digit Mobile Number" maxlength="10">
+                    <button class="btn-gold" style="background: rgba(37, 211, 102, 0.15); border: 1px solid var(--success); color: var(--success); box-shadow: none;" onclick="addMember()">ADD TO DIRECTORY</button>
+                    
+                    <h4 style="color: #777; margin-top: 30px; text-align: left; text-transform: uppercase; font-size: 10px; letter-spacing: 1px;">Member Contributions (Selected Year):</h4>
+                    <div class="table-responsive">
+                        <table id="members-table">
+                            <thead><tr><th>Member Details</th><th>Paid Status</th><th id="mem-action-col">Action</th></tr></thead>
+                            <tbody id="members-list"></tbody>
+                        </table>
+                    </div>
                 </div>
+
                 <div id="admin-deleted" class="admin-panel">
-                    <h3 style="color: #f87171; font-size: 14px;">Trash History (President Only)</h3>
-                    <table id="deleted-table"><tbody id="deleted-list"></tbody></table>
+                    <h3 style="color: var(--danger); font-size: 13px; margin: 0 0 5px 0; text-transform: uppercase; letter-spacing: 1px;">System Trash</h3>
+                    <p style="font-size: 10px; color:#666; margin-bottom:15px;">Secure vault. Only the President can permanently wipe this data.</p>
+                    <div class="table-responsive">
+                        <table id="deleted-table">
+                            <thead><tr><th>Deleted Info</th><th>Amount</th><th style="width: 60px;">Action</th></tr></thead>
+                            <tbody id="deleted-list"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+
             <div class="fy-banner">
-                <h3>Financial Year</h3>
+                <div>
+                    <h3 style="font-size: 12px; color: #888;">FINANCIAL YEAR</h3>
+                    <h2 style="margin: 0; color: #fff; font-size: 16px;">Ledger Report</h2>
+                </div>
                 <select id="yearFilter" onchange="loadRecords()"></select>
             </div>
+
             <div class="summary-container">
-                <div class="sum-box"><h4 class="text-inc">Income</h4><div id="totInc" class="amt text-inc">₹0</div></div>
-                <div class="sum-box"><h4 class="text-exp">Expense</h4><div id="totExp" class="amt text-exp">₹0</div></div>
-                <div class="sum-box"><h4 class="text-bal">Balance</h4><div id="totBal" class="amt text-bal">₹0</div></div>
+                <div class="sum-box"><h4 class="text-inc">Total Income</h4><div id="totInc" class="amt text-inc">₹0</div></div>
+                <div class="sum-box"><h4 class="text-exp">Total Expense</h4><div id="totExp" class="amt text-exp">₹0</div></div>
+                <div class="sum-box"><h4 class="text-bal">Net Balance</h4><div id="totBal" class="amt text-bal">₹0</div></div>
             </div>
-            <table><tbody id="records-list"></tbody></table>
-            <button class="btn-gold" style="background: transparent; border: 1px solid #ff4d4d; color: #ff4d4d; margin-top: 40px;" onclick="logout()">SECURE SIGN OUT</button>
+            
+            <div style="text-align: left; margin: 30px 0 15px 0; display: flex; justify-content: space-between; align-items: flex-end;">
+                <h3 style="margin: 0; font-size: 14px; color: #aaa; text-transform: uppercase; letter-spacing: 1px;">Transaction History</h3>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead><tr><th>Particulars & Date</th><th>Amount (₹)</th><th id="action-col" style="display:none; text-align: center; width: 140px;">Actions</th></tr></thead>
+                    <tbody id="records-list"></tbody>
+                </table>
+            </div>
+            
+            <button class="btn-gold" style="background: rgba(248,113,113,0.05); border: 1px solid rgba(248,113,113,0.3); color: var(--danger); margin-top: 50px; box-shadow: none;" onclick="logout()">SECURE SIGN OUT</button>
+            <p style="font-size: 9px; color: #444; margin-top: 20px; text-transform: uppercase; letter-spacing: 2px;">Powered by AI Master Code</p>
         </div>
     </div>
 
     <script>
+        // --- FIREBASE INITIALIZATION ---
         const firebaseConfig = { databaseURL: "https://planning-with-ai-fa788-default-rtdb.firebaseio.com/" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         let currentOTP;
 
-        // Admin Credentials Updated
+        // --- ULTRA-SECURE ADMIN CREDENTIALS ---
         const ADMIN_DB = {
-            "9937765417": { role: "President", name: "SUDHIR DAS", pass: "CHAMP993868" },
-            "8658441544": { role: "Manager", name: "ABANISH DAS", pass: "CHAMPIONS2026" },
-            "9556082911": { role: "Secretary", name: "KRITI RANJAN DAS", pass: "CHAMPIONS2026" }
+            "9937765417": { role: "President", name: "SUDHIR DAS", pass: "CHAMP993868" }, // Full Powers (Edit/Delete)
+            "8658441544": { role: "Manager", name: "ABANISH DAS", pass: "CHAMPIONS2026" }, // Add/Receipt Only
+            "9556082911": { role: "Secretary", name: "KRITI RANJAN DAS", pass: "CHAMPIONS2026" } // Add/Receipt Only
         };
 
+        let allMembers = [];
+        let memberPaidTotals = {}; 
+
+        // --- UI TAB SWITCHING LOGIC ---
         function switchLogin(type) {
             document.querySelectorAll('.form-section').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-box .tab-btn').forEach(el => el.classList.remove('active'));
-            if(type === 'member') { document.getElementById('form-member').classList.add('active'); document.getElementById('tab-mem').classList.add('active'); } 
-            else { document.getElementById('form-admin').classList.add('active'); document.getElementById('tab-adm').classList.add('active'); }
+            document.querySelectorAll('#login-area .tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById('form-'+type).classList.add('active');
+            document.getElementById('tab-'+type).classList.add('active');
         }
 
         function switchAdminTab(type) {
@@ -165,99 +270,368 @@
             document.getElementById('tab-'+type).classList.add('active');
         }
 
+        function toggleAddForm() {
+            let t = document.getElementById('typeInput').value;
+            if(t === 'income') { 
+                document.getElementById('inc-form').style.display = 'block'; 
+                document.getElementById('exp-form').style.display = 'none'; 
+            } else { 
+                document.getElementById('inc-form').style.display = 'none'; 
+                document.getElementById('exp-form').style.display = 'block'; 
+            }
+        }
+
+        function checkGuest() {
+            let m = document.getElementById('memberSelect').value;
+            document.getElementById('guestInput').style.display = (m === 'guest') ? 'block' : 'none';
+        }
+
+        // --- AUTHENTICATION LOGIC ---
         function adminLogin() {
             const phone = document.getElementById('admPhone').value; const pass = document.getElementById('admPass').value;
             if(ADMIN_DB[phone] && ADMIN_DB[phone].pass === pass) {
                 localStorage.setItem("mmc_user", phone); localStorage.setItem("mmc_role", ADMIN_DB[phone].role); localStorage.setItem("mmc_name", ADMIN_DB[phone].name);
                 location.reload();
-            } else { alert("Invalid Credentials!"); }
+            } else { alert("Access Denied! Incorrect Number or Password."); }
         }
 
         function requestOTP() {
             const phone = document.getElementById('memPhone').value;
+            if(phone.length !== 10) { alert("Enter valid 10-digit mobile number"); return; }
             db.ref('members/' + phone).once('value', (snap) => {
                 if(snap.exists()) {
                     currentOTP = Math.floor(1000 + Math.random() * 9000);
                     document.getElementById('otp-display').innerText = currentOTP;
                     document.getElementById('otp-section').style.display = 'block';
-                } else { alert("Not registered!"); }
+                    localStorage.setItem("temp_mem_name", snap.val().name);
+                } else { alert("Your number is not registered in the Club Directory."); }
             });
         }
 
         function verifyMemberLogin() {
-            if(document.getElementById('memOtp').value == currentOTP) {
-                localStorage.setItem("mmc_user", document.getElementById('memPhone').value);
-                localStorage.setItem("mmc_role", "Member");
+            const entered = document.getElementById('memOtp').value; const phone = document.getElementById('memPhone').value;
+            if(entered == currentOTP) {
+                localStorage.setItem("mmc_user", phone); localStorage.setItem("mmc_role", "Member"); localStorage.setItem("mmc_name", localStorage.getItem("temp_mem_name"));
                 location.reload();
-            } else { alert("Wrong OTP!"); }
+            } else { alert("Incorrect OTP! Try again."); }
         }
 
+        // --- APP INITIALIZATION ---
         window.onload = function() {
-            const role = localStorage.getItem("mmc_role");
+            const user = localStorage.getItem("mmc_user"); const role = localStorage.getItem("mmc_role"); const name = localStorage.getItem("mmc_name");
+            
+            // Populate Financial Years automatically
             const yearDrop = document.getElementById('yearFilter'); const currentYear = new Date().getFullYear();
             for(let i = currentYear; i >= 2024; i--) { yearDrop.innerHTML += `<option value="${i}">${i}</option>`; }
-            if(localStorage.getItem("mmc_user")) {
+            
+            if(user) {
                 document.getElementById('login-area').style.display = 'none'; document.getElementById('dashboard').style.display = 'block';
-                document.getElementById('userRoleDisplay').innerText = role;
+                document.getElementById('userRoleDisplay').innerText = role + " | " + name;
+                
                 if(["President", "Manager", "Secretary"].includes(role)) {
-                    document.getElementById('admin-controls').style.display = 'block'; fetchMembers();
-                    if(role === "President") { document.getElementById('tab-deleted').style.display = 'block'; loadDeletedRecords(); }
+                    document.getElementById('admin-controls').style.display = 'block'; 
+                    document.getElementById('action-col').style.display = 'table-cell';
+                    fetchMembers(); 
+                    
+                    // Hide Member Remove option for non-presidents
+                    if(role !== "President") { document.getElementById('mem-action-col').style.display = 'none'; }
+                    
+                    // Show Trash only for President
+                    if(role === "President") {
+                        document.getElementById('tab-deleted').style.display = 'block';
+                        loadDeletedRecords();
+                    }
                 }
-                loadRecords();
+                loadRecords(); 
             }
         }
 
-        function addRecord() {
-            const type = document.getElementById('typeInput').value; const amt = document.getElementById('amtInput').value;
-            let desc = (type === 'income') ? (document.getElementById('memberSelect').value === 'guest' ? document.getElementById('guestInput').value : document.getElementById('memberSelect').options[document.getElementById('memberSelect').selectedIndex].text.split(' - ')[0]) : document.getElementById('descInput').value;
-            db.ref('records').push({ type, desc, amount: Number(amt), category: document.getElementById('incomeCategory').value, timestamp: Date.now() });
-            location.reload();
+        // --- MEMBER MANAGEMENT DIRECTORY ---
+        function addMember() {
+            const name = document.getElementById('newMemName').value; const phone = document.getElementById('newMemPhone').value;
+            if(name && phone.length === 10) {
+                db.ref('members/' + phone).set({ name: name, phone: phone });
+                alert("New Member successfully added to directory!"); 
+                document.getElementById('newMemName').value = ''; document.getElementById('newMemPhone').value = '';
+            } else { alert("Please provide a valid Name and 10-digit Number."); }
         }
-
-        function loadRecords() {
-            const selectedYear = parseInt(document.getElementById('yearFilter').value);
-            db.ref('records').on('value', (snap) => {
-                const list = document.getElementById('records-list'); list.innerHTML = "";
-                let tI = 0, tE = 0;
-                snap.forEach(child => {
-                    const d = child.val();
-                    if(new Date(d.timestamp).getFullYear() === selectedYear) {
-                        if(d.type === 'income') tI += d.amount; else tE += d.amount;
-                        list.innerHTML += `<tr><td>${d.desc}<br><span class="time-txt">${new Date(d.timestamp).toLocaleString()}</span></td><td>₹${d.amount}</td>${localStorage.getItem("mmc_role") === "President" ? `<td><button class="btn-sm btn-del" onclick="moveToTrash('${child.key}')">Del</button></td>` : ""}</tr>`;
-                    }
-                });
-                document.getElementById('totInc').innerText = "₹" + tI; document.getElementById('totExp').innerText = "₹" + tE; document.getElementById('totBal').innerText = "₹" + (tI - tE);
-            });
-        }
-
-        function moveToTrash(id) {
-            db.ref('records/' + id).once('value', snap => {
-                db.ref('deleted_records/' + id).set({...snap.val(), deletedAt: Date.now()}).then(() => db.ref('records/' + id).remove());
-            });
-        }
-
-        function loadDeletedRecords() {
-            db.ref('deleted_records').on('value', snap => {
-                const list = document.getElementById('deleted-list'); list.innerHTML = "";
-                snap.forEach(child => {
-                    list.innerHTML += `<tr><td>${child.val().desc}</td><td>₹${child.val().amount}</td><td><button class="btn-sm btn-del" onclick="db.ref('deleted_records/${child.key}').remove()">Clear</button></td></tr>`;
-                });
-            });
+        
+        function removeMember(phone) { 
+            // Strict President Check
+            if(localStorage.getItem("mmc_role") === "President") {
+                if(confirm("Are you sure? This member will lose all login access permanently.")) { db.ref('members/' + phone).remove(); } 
+            }
         }
 
         function fetchMembers() {
-            db.ref('members').on('value', snap => {
-                const list = document.getElementById('members-list'); const drop = document.getElementById('memberSelect');
-                list.innerHTML = ""; drop.innerHTML = '<option value="guest">Other</option>';
-                snap.forEach(child => {
-                    list.innerHTML += `<tr><td>${child.val().name}</td><td>${child.val().phone}</td><td><button class="btn-sm btn-del" onclick="db.ref('members/${child.key}').remove()">Del</button></td></tr>`;
-                    drop.innerHTML += `<option value="${child.val().phone}">${child.val().name}</option>`;
-                });
+            db.ref('members').on('value', (snap) => {
+                allMembers = []; snap.forEach(child => { allMembers.push(child.val()); });
+                updateMemberUI();
             });
         }
 
-        function addMember() {
-            db.ref('members/' + document.getElementById('newMemPhone').value).set({ name: document.getElementById('newMemName').value, phone: document.getElementById('newMemPhone').value });
+        function updateMemberUI() {
+            const role = localStorage.getItem("mmc_role");
+            const drop = document.getElementById('memberSelect');
+            if(drop) {
+                let html = '<option value="guest">Guest / Non-Member</option>';
+                allMembers.forEach(m => { html += `<option value="${m.phone}">${m.name} - ${m.phone}</option>`; });
+                drop.innerHTML = html;
+            }
+
+            const list = document.getElementById('members-list');
+            if(list) {
+                list.innerHTML = "";
+                allMembers.forEach(m => {
+                    const p = memberPaidTotals[m.phone] || { ghara: 0, member: 0 };
+                    let actionBtn = role === "President" ? `<td><button class="btn-sm btn-del" style="width:auto;" onclick="removeMember('${m.phone}')">Del</button></td>` : `<td style="display:none;"></td>`;
+                    
+                    list.innerHTML += `<tr>
+                        <td><b style="color:#fff; font-size:13px;">${m.name}</b><br><span style="color:#777;font-size:10px;">📞 ${m.phone}</span></td>
+                        <td class="mem-tot">
+                            ଘର ଚାନ୍ଦା: <span class="val-ghara">₹${p.ghara.toLocaleString('en-IN')}</span><br>
+                            ମେମ୍ବର: <span class="val-mem">₹${p.member.toLocaleString('en-IN')}</span>
+                        </td>
+                        ${actionBtn}
+                    </tr>`;
+                });
+            }
+        }
+
+        // --- CORE LEDGER ENGINE ---
+        function addRecord() {
+            const type = document.getElementById('typeInput').value; const amt = document.getElementById('amtInput').value;
+            let desc = "", phone = "", category = "";
+
+            if(!amt || amt <= 0) { alert("Please enter a valid amount"); return; }
+
+            if(type === 'income') {
+                category = document.getElementById('incomeCategory').value;
+                const memVal = document.getElementById('memberSelect').value;
+                if(memVal === 'guest') {
+                    desc = document.getElementById('guestInput').value;
+                    if(!desc) { alert("Please enter the Donor's Name"); return; }
+                } else {
+                    const sel = document.getElementById('memberSelect');
+                    desc = sel.options[sel.selectedIndex].text.split(' - ')[0];
+                    phone = memVal;
+                }
+            } else {
+                category = "ବ୍ୟୟ (Expense)";
+                desc = document.getElementById('descInput').value;
+                if(!desc) { alert("ଦୟାକରି ଖର୍ଚ୍ଚର ଉଦ୍ଦେଶ୍ୟ ଲେଖନ୍ତୁ (Provide Expense Purpose)"); return; }
+            }
+
+            db.ref('records').push({ type, desc, phone, category, amount: Number(amt), timestamp: Date.now(), addedBy: localStorage.getItem("mmc_name") });
+            document.getElementById('guestInput').value = ''; document.getElementById('descInput').value = ''; document.getElementById('amtInput').value = '';
+        }
+
+        // EDIT RECORD (Strictly President Only)
+        function editRecord(id, oldDesc, oldAmt, type) {
+            let promptMsg = type === 'income' ? "ପରିବର୍ତ୍ତନ କରନ୍ତୁ (Edit Donor Name):" : "ଖର୍ଚ୍ଚ ଉଦ୍ଦେଶ୍ୟ ପରିବର୍ତ୍ତନ (Edit Expense Purpose):";
+            const newDesc = prompt(promptMsg, oldDesc);
+            if (newDesc === null || newDesc.trim() === "") return;
+            
+            const newAmt = prompt("ଟଙ୍କା ପରିବର୍ତ୍ତନ କରନ୍ତୁ (Edit Amount ₹):", oldAmt);
+            if (newAmt === null || newAmt.trim() === "") return;
+
+            db.ref('records/' + id).update({ desc: newDesc, amount: Number(newAmt) });
+        }
+
+        function loadRecords() {
+            const role = localStorage.getItem("mmc_role");
+            const selectedYear = parseInt(document.getElementById('yearFilter').value);
+            
+            db.ref('records').on('value', (snap) => {
+                const list = document.getElementById('records-list'); list.innerHTML = "";
+                let totalInc = 0; let totalExp = 0; let hasData = false;
+                
+                memberPaidTotals = {}; 
+                allMembers.forEach(m => { memberPaidTotals[m.phone] = { ghara: 0, member: 0, other: 0 }; });
+                
+                let dataArr = []; snap.forEach(child => { dataArr.push({ id: child.key, ...child.val() }); });
+                dataArr.reverse(); // Display newest first
+                
+                dataArr.forEach((d) => {
+                    const recordYear = new Date(d.timestamp).getFullYear();
+                    if(recordYear !== selectedYear) return; // Year Filter
+                    hasData = true;
+                    
+                    if(d.type === 'income') {
+                        totalInc += Number(d.amount);
+                        if(d.phone) {
+                            memberPaidTotals[d.phone] = memberPaidTotals[d.phone] || { ghara: 0, member: 0, other: 0 };
+                            if(d.category && d.category.includes('ଘର ଚାନ୍ଦା')) memberPaidTotals[d.phone].ghara += Number(d.amount);
+                            else if(d.category && d.category.includes('ମେମ୍ବର ଚାନ୍ଦା')) memberPaidTotals[d.phone].member += Number(d.amount);
+                            else memberPaidTotals[d.phone].other += Number(d.amount);
+                        }
+                    } else { totalExp += Number(d.amount); }
+                    
+                    let dateObj = new Date(d.timestamp);
+                    let timeString = dateObj.toLocaleDateString('en-IN') + " • " + dateObj.toLocaleTimeString('en-IN', {hour: '2-digit', minute:'2-digit'});
+                    let phoneDisplay = d.phone ? `<span style="color:#555; font-size:10px; margin-left:8px; font-weight:normal;">📞 ${d.phone}</span>` : "";
+                    
+                    let typeBadge = d.type === 'income' ? '<span class="type-badge bg-inc">IN +</span>' : '<span class="type-badge bg-exp">OUT -</span>';
+                    let displayCat = d.category ? d.category.split(' (')[0] : "";
+                    let catBadge = displayCat ? `<span class="cat-badge">${displayCat}</span>` : "";
+                    let amtColor = d.type === 'income' ? 'var(--success)' : 'var(--danger)';
+                    
+                    let actions = "";
+                    if(["President", "Manager", "Secretary"].includes(role)) {
+                        let extraBtns = "";
+                        if(d.type === 'income') {
+                            let phoneArg = d.phone ? `'${d.phone}'` : `null`;
+                            let catArg = d.category ? `'${d.category}'` : `'Donation'`;
+                            const waMessage = encodeURIComponent(`ନମସ୍କାର ${d.desc} ବାବୁ,\n\nମାଆ ମଙ୍ଗଳା କ୍ଲବ୍ (ତୋଟାସାହି, ବାଗଲପୁର) ତରଫରୁ ଆପଣଙ୍କୁ ଅଶେଷ ଧନ୍ୟବାଦ। 🙏\nଆର୍ଥିକ ବର୍ଷ ${selectedYear} ପାଇଁ ଆପଣଙ୍କର ₹${d.amount} ର ${displayCat} ଆମେ ସାଦରେ ଗ୍ରହଣ କଲୁ।\n\n- ଅବନୀଶ ଦାସ (Manager)`);
+                            
+                            extraBtns = `
+                                <button class="btn-sm btn-pdf" onclick="downloadReceipt('${d.desc}', ${phoneArg}, ${d.amount}, ${d.timestamp}, ${catArg}, ${selectedYear})">📜 PDF</button>
+                                <button class="btn-sm btn-wa" onclick="window.open('https://wa.me/?text=${waMessage}', '_blank')">💬 Share</button>
+                            `;
+                        }
+                        
+                        // PRESIDENT ONLY HAS EDIT/DELETE POWER
+                        let adminActions = "";
+                        if(role === "President") {
+                            adminActions = `
+                                <button class="btn-sm btn-edit" onclick="editRecord('${d.id}', '${d.desc}', ${d.amount}, '${d.type}')">Edit</button>
+                                <button class="btn-sm btn-del" onclick="moveToTrash('${d.id}')">Del</button>
+                            `;
+                        }
+                        
+                        if(extraBtns || adminActions) {
+                            actions = `<td style="vertical-align: middle;">
+                                <div class="action-flex">
+                                    ${extraBtns}
+                                    ${adminActions}
+                                </div>
+                            </td>`;
+                        } else { actions = `<td></td>`; }
+                    }
+                    
+                    list.innerHTML += `<tr>
+                        <td>
+                            <div style="font-size: 13px; font-weight: 600; color: #fff;">${d.desc} ${phoneDisplay}</div>
+                            <div style="margin-top:6px;">${typeBadge}${catBadge}</div>
+                            <span class="time-txt">${timeString}</span>
+                        </td>
+                        <td style="color:${amtColor}; font-weight:700; font-size:16px; vertical-align: middle;">₹${d.amount.toLocaleString('en-IN')}</td>
+                        ${actions}
+                    </tr>`;
+                });
+                
+                // Update Dashboard Animation & Values
+                document.getElementById('totInc').innerText = '₹' + totalInc.toLocaleString('en-IN'); 
+                document.getElementById('totExp').innerText = '₹' + totalExp.toLocaleString('en-IN'); 
+                document.getElementById('totBal').innerText = '₹' + (totalInc - totalExp).toLocaleString('en-IN');
+                
+                if(!hasData) { 
+                    const colspan = ["President", "Manager", "Secretary"].includes(role) ? 3 : 2; 
+                    list.innerHTML = `<tr><td colspan="${colspan}" style="text-align:center; color:#555; padding: 40px; font-size:12px; letter-spacing:1px; text-transform:uppercase;">No transactions found for FY ${selectedYear}.</td></tr>`; 
+                }
+                updateMemberUI(); 
+            });
+        }
+
+        // --- SECURE TRASH SYSTEM (President Only) ---
+        function moveToTrash(id) {
+            if(confirm("Move this transaction to TRASH? It will be removed from the main ledger.")) {
+                db.ref('records/' + id).once('value', snap => {
+                    let data = snap.val();
+                    if(data) {
+                        data.deletedBy = localStorage.getItem("mmc_name");
+                        data.deletedAt = Date.now();
+                        db.ref('deleted_records/' + id).set(data).then(() => {
+                            db.ref('records/' + id).remove();
+                        });
+                    }
+                });
+            }
+        }
+
+        function loadDeletedRecords() {
+            db.ref('deleted_records').on('value', (snap) => {
+                const list = document.getElementById('deleted-list'); list.innerHTML = "";
+                let dataArr = []; snap.forEach(child => { dataArr.push({ id: child.key, ...child.val() }); });
+                dataArr.reverse();
+                
+                let hasData = false;
+                dataArr.forEach((d) => {
+                    hasData = true;
+                    let delDate = new Date(d.deletedAt).toLocaleDateString('en-IN') + " " + new Date(d.deletedAt).toLocaleTimeString('en-IN', {hour: '2-digit', minute:'2-digit'});
+                    
+                    list.innerHTML += `<tr>
+                        <td>
+                            <div style="font-size: 13px; font-weight: bold; color: #777; text-decoration: line-through;">${d.desc}</div>
+                            <div style="font-size: 10px; color: var(--danger); margin-top:4px;">Deleted by: ${d.deletedBy}</div>
+                            <span class="time-txt">On: ${delDate}</span>
+                        </td>
+                        <td style="color:#555; font-weight:bold; font-size:14px; vertical-align: middle;">₹${d.amount}</td>
+                        <td style="vertical-align: middle;">
+                            <button class="btn-sm btn-del" style="background:var(--danger); color:#000;" onclick="permanentlyDelete('${d.id}')">Wipe</button>
+                        </td>
+                    </tr>`;
+                });
+                if(!hasData) { list.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#444; padding: 30px; font-size:11px; text-transform:uppercase; letter-spacing:1px;">Trash is empty.</td></tr>`; }
+            });
+        }
+
+        function permanentlyDelete(id) {
+            if(confirm("CRITICAL ACTION: Are you sure you want to permanently wipe this record? This CANNOT be undone.")) {
+                db.ref('deleted_records/' + id).remove();
+            }
+        }
+
+        // --- PROFESSIONAL PDF RECEIPT ENGINE ---
+        window.jsPDF = window.jspdf.jsPDF;
+        function downloadReceipt(donorName, phone, amount, time, category, year) {
+            const doc = new jsPDF();
+            doc.setDrawColor(212, 175, 55); doc.setLineWidth(1.5); doc.rect(10, 10, 190, 185);
+            doc.setLineWidth(0.5); doc.rect(12, 12, 186, 181);
+            
+            const logoEl = document.getElementById('logo-img');
+            if (logoEl && logoEl.complete && logoEl.naturalHeight !== 0) { try { doc.addImage(logoEl, 'PNG', 85, 15, 40, 30); } catch(e) {} }
+            
+            doc.setFont("helvetica", "bold"); doc.setFontSize(26); doc.setTextColor(212, 175, 55);
+            doc.text("MAA MANGALA CLUB", 105, 55, null, null, "center");
+            doc.setFont("helvetica", "normal"); doc.setFontSize(11); doc.setTextColor(100, 100, 100);
+            doc.text("Totasahi, At/Po- Bagalpur, Dist- Jagatsinghpur, PIN- 754102, Odisha", 105, 63, null, null, "center");
+            doc.setDrawColor(220, 220, 220); doc.line(20, 70, 190, 70);
+            
+            doc.setFont("helvetica", "bold"); doc.setFontSize(18); doc.setTextColor(30, 30, 30);
+            doc.text("OFFICIAL DONATION RECEIPT", 105, 82, null, null, "center");
+            
+            let d = new Date(time);
+            doc.setFontSize(11); doc.setFont("helvetica", "normal"); doc.setTextColor(80, 80, 80);
+            doc.text("Date: " + d.toLocaleDateString('en-IN'), 20, 95);
+            doc.text("Receipt No: MMC-" + time.toString().slice(-6), 135, 95);
+            doc.setFont("helvetica", "bold"); doc.text("Financial Year: " + year, 20, 102); doc.setFont("helvetica", "normal");
+            
+            doc.setFontSize(13); doc.setTextColor(50, 50, 50);
+            doc.text("Received with gratitude from:", 20, 115);
+            doc.setFontSize(22); doc.setFont("helvetica", "bold"); doc.setTextColor(212, 175, 55);
+            doc.text(donorName.toUpperCase(), 20, 125);
+            
+            if(phone) { doc.setFontSize(11); doc.setFont("helvetica", "normal"); doc.setTextColor(120, 120, 120); doc.text("Contact No: " + phone, 20, 133); }
+            
+            let safeCategory = category.includes('(') ? category.split('(')[1].replace(')', '') : category;
+            doc.setFontSize(13); doc.setFont("helvetica", "normal"); doc.setTextColor(80, 80, 80);
+            doc.text("Towards Category : " + safeCategory, 20, 142);
+
+            doc.setFontSize(14); doc.setFont("helvetica", "normal"); doc.setTextColor(30, 30, 30);
+            doc.text("A sum of Rupees : ", 20, 152);
+            doc.setFont("helvetica", "bold"); doc.setTextColor(212, 175, 55);
+            doc.text("Rs. " + amount.toLocaleString('en-IN') + " /-", 65, 152);
+            
+            doc.setFont("helvetica", "italic"); doc.setFontSize(12); doc.setTextColor(180, 140, 40);
+            doc.text("May Maa Mangala bless you and your family with peace and prosperity.", 105, 166, null, null, "center");
+            doc.text("Thank you for your generous contribution!", 105, 172, null, null, "center");
+            
+            doc.setTextColor(30, 30, 30); doc.setDrawColor(50, 50, 50); doc.line(140, 175, 185, 175);
+            doc.setFont("helvetica", "normal"); doc.setFontSize(10); 
+            doc.text("Manager (ABANISH DAS)", 141, 180); doc.text("Authorized Signature", 145, 185);
+            
+            doc.save(`MMC_Receipt_${year}_${donorName}.pdf`);
         }
 
         function logout() { localStorage.clear(); location.reload(); }
