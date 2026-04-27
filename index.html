@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MAA MANGALA CLUB | Puja Ledger</title>
     
-    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="icon" href="3d-1.png" type="image/png">
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -53,7 +53,7 @@
 
     <div id="login-area" class="container">
         <div class="card">
-            <img id="logo-img" src="logo.png" alt="MMC Logo" class="app-logo" onerror="this.style.display='none'">
+            <img id="logo-img" src="3d-1.png" alt="MMC Logo" class="app-logo" onerror="this.style.display='none'">
             
             <h1 class="gold-text">MAA MANGALA CLUB</h1>
             <p class="address-text">Totasahi, At/Po- Bagalpur<br>Dist- Jagatsinghpur, PIN- 754102</p>
@@ -69,7 +69,7 @@
 
     <div id="dashboard">
         <div class="header-box">
-            <img src="logo.png" alt="Logo" style="width: 50px; margin-bottom: 5px;" onerror="this.style.display='none'">
+            <img src="3d-1.png" alt="Logo" style="width: 50px; margin-bottom: 5px;" onerror="this.style.display='none'">
             <h2 class="gold-text" style="font-size: 20px; margin-top:0;">MAA MANGALA CLUB</h2>
             <div class="badge" id="userRoleDisplay"></div>
         </div>
@@ -216,7 +216,7 @@
             });
         }
 
-        // PDF Generation with Logo
+        // PDF Generation with Logo (Now pulling 3d-1.png)
         window.jsPDF = window.jspdf.jsPDF;
         function downloadReceipt(donorName, amount, time) {
             const doc = new jsPDF();
@@ -225,7 +225,7 @@
             doc.setDrawColor(212, 175, 55); doc.setLineWidth(1.5); doc.rect(10, 10, 190, 150);
             doc.setLineWidth(0.5); doc.rect(12, 12, 186, 146);
 
-            // Add Logo to PDF (If available)
+            // Add Logo to PDF
             const logoEl = document.getElementById('logo-img');
             if (logoEl && logoEl.complete && logoEl.naturalHeight !== 0) {
                 try {
