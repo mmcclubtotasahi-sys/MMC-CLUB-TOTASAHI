@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMC CLUB - BAGALPUR</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root { --primary: #000000; --gold: #D4AF37; --expense: #D32F2F; --bg: #f4f4f4; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; text-align: center; }
+        
+        .header { background: #000; color: var(--gold); padding: 20px 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .header img { width: 80px; height: auto; margin-bottom: 10px; }
+        .club-name { font-size: 22px; font-weight: bold; letter-spacing: 1px; }
+        .address-line { font-size: 10px; color: #aaa; margin-top: 5px; text-transform: uppercase; }
+
+        .container { padding: 15px; max-width: 500px; margin: auto; }
+        .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 15px; border-top: 3px solid var(--gold); }
+        
+        .summary-box { background: linear-gradient(135deg, #000, #222); color: var(--gold); padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--gold); }
+        .balance-text { font-size: 28px; font-weight: bold; margin-top: 10px; }
+
+        input, select { padding: 12px; width: 90%; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
+        button { background: #000; color: var(--gold); border: 1px solid var(--gold); padding: 14px; width: 95%; border-radius: 8px; font-weight: bold; margin: 5px 0; cursor: pointer; }
+        button:active { background: var(--gold); color: #000; }
+
+        #loginScreen, #otpScreen, #dashboardScreen { display: none; }
+        .admin-panel { background: #fffde7; border: 1px dashed var(--gold); display: none; padding: 10px; border-radius: 10px; margin-top: 10px; }
+        .manager-panel { background: #e8f5e9; border: 1px dashed #2e7d32; display: none; padding: 10px; border-radius: 10px; margin-top: 10px; }
+        
+        .list-item { border-bottom: 1px solid #eee; padding: 12px 0; display: flex; justify-content: space-between; align-items: center; text-align: left; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="https://raw.githubusercontent.com/Sudhir-Das/mmc-club/main/logo.png" alt="MMC Logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2972/2972179.png'">
+        <div class="club-name">MAA MANGALA CLUB</div>
+        <div class="address-line">TOTA SAHI, BAGALPUR, JAGATSINGHPUR - 754102</div>
+    </div>
+
+    <div class="container" id="loginScreen" style="display:block;">
+        <div class="card">
+            <h3>🔑 Member Login</h3>
+            <input type="tel" id="phoneInput" placeholder="Mobile Number" maxlength="10">
+            <button onclick="checkAuth()">Login with OTP</button>
+        </div>
+    </div>
+
+    <div class="container" id="otpScreen">
+        <div class="card">
+            <h3>Verify OTP</h3>
+            <input type="number" id="otpInput" placeholder="Enter 4-Digit Code">
+            <button onclick="verifyOTP()">Verify & Access</button>
+        </div>
+    </div>
+
+    <div class="container" id="dashboardScreen">
+        <div class="summary-box">
+            <div style="display:flex; justify-content: space-around; font-size: 12px;">
+                <span>TOTAL IN: <b id="totalIn">₹0</b></span>
+                <span>TOTAL OUT: <b id="totalOut">₹0</b></span>
+            </div>
+            <div class="balance-text">Balance: <span id="totalBal">₹0</span></div>
+        </div>
+
+        <div class="card admin-panel" id="adminPanel">
+            <h4 style="margin:0; color: #000;">Member Registration</h4>
+            <input type="text" id="mName" placeholder="Full Name">
+            <input type="tel" id="mPhone" placeholder="Mobile Number" maxlength="10">
+            <button onclick="registerMember()">+ Register Member</button>
+        </div>
+
+        <div class="card manager-panel" id="managerPanel">
+            <h4 style="margin:0; color: #2e7d32;">Manager Entry</h4>
+            <input type="text" id="transTitle" placeholder="Reason / Name">
+            <input type="number" id="transAmt" placeholder="Amount (₹)">
+            <div style="display:flex; justify-content: space-between;">
+                <button style="width:48%; background:#2e7d32; color:white;" onclick="addEntry('donations')">Income</button>
+                <button style="width:48%; background:#d32f2f; color:white;" onclick="addEntry('expenses')">Expense</button>
+            </div>
+            <button style="background:#f57c00; color:white; border:none;" onclick="addNewYear()">+ New Year File</button>
+        </div>
+
+        <div class="card">
+            <select id="yearSelect" onchange="loadData(this.value)"></select>
+            <div style="display:flex; justify-content: space-around; margin-top:10px;">
+                <button style="width:48%; background:#eee; color:#000;" onclick="showTab('in')">Donations</button>
+                <button style="width:48%; background:#eee; color:#000;" onclick="showTab('out')">Expenses</button>
+            </div>
+            <div id="inTab" style="margin-top:10px; max-height: 300px; overflow-y: auto;"></div>
+            <div id="outTab" style="display:none; margin-top:10px; max-height: 300px; overflow-y: auto;"></div>
+        </div>
+
+        <button style="background:#555; color:white; border:none;" onclick="location.reload()">Logout</button>
+    </div>
+
+    <script>
+        // --- Firebase Configuration ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyALfO3mXaETB4xHeMyJl-bYCTMvTRm7feE",
+            authDomain: "planning-with-ai-fa788.firebaseapp.com",
+            projectId: "planning-with-ai-fa788",
+            storageBucket: "planning-with-ai-fa788.firebasestorage.app",
+            messagingSenderId: "389814167820",
+            appId: "1:389814167820:web:2ffaaf67565923ba128129",
+            databaseURL: "https://planning-with-ai-fa788-default-rtdb.firebaseio.com/"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let genOTP = "";
+        let userPhone = "";
+        const coreTeam = ["9937765417", "9556082911", "8658441544"];
+
+        function checkAuth() {
+            userPhone = document.getElementById("phoneInput").value;
+            db.ref('members/' + userPhone).once('value', (snap) => {
+                if (snap.exists() || coreTeam.includes(userPhone)) {
+                    genOTP = Math.floor(1000 + Math.random() * 9000).toString();
+                    alert("MMC CLUB OTP: " + genOTP);
+                    document.getElementById("loginScreen").style.display = "none";
+                    document.getElementById("otpScreen").style.display = "block";
+                } else { alert("Access Denied! Register First."); }
+            });
+        }
+
+        function verifyOTP() {
+            if(document.getElementById("otpInput").value !== genOTP) return alert("Invalid OTP");
+            document.getElementById("otpScreen").style.display = "none";
+            document.getElementById("dashboardScreen").style.display = "block";
+            if(coreTeam.includes(userPhone)) {
+                document.getElementById("adminPanel").style.display = "block";
+                if(userPhone === "8658441544") document.getElementById("managerPanel").style.display = "block";
+            }
+            initApp();
+        }
+
+        function registerMember() {
+            let n = document.getElementById("mName").value; let p = document.getElementById("mPhone").value;
+            db.ref('members/' + p).set({ name: n });
+            alert("Registered!");
+        }
+
+        function initApp() {
+            db.ref('years').on('value', (s) => {
+                let keys = Object.keys(s.val() || {"2026": true}).sort().reverse();
+                document.getElementById("yearSelect").innerHTML = keys.map(k => `<option value="${k}">${k}</option>`).join('');
+                loadData(keys[0]);
+            });
+        }
+
+        function addNewYear() {
+            let y = prompt("Year (YYYY):");
+            if(y) db.ref('years/'+y).set(true);
+        }
+
+        function addEntry(type) {
+            let year = document.getElementById("yearSelect").value;
+            let title = document.getElementById("transTitle").value;
+            let amt = document.getElementById("transAmt").value;
+            db.ref(type + '/' + year).push({ title: title, amt: amt, time: new Date().toLocaleString() });
+            alert("Saved!");
+        }
+
+        function loadData(year) {
+            db.ref('donations/'+year).on('value', (si) => {
+                let tIn = 0; let dData = si.val(); let hIn = "";
+                for(let id in dData) {
+                    tIn += parseFloat(dData[id].amt);
+                    hIn += `<div class="list-item"><div><b>${dData[id].title}</b><br><small>${dData[id].time}</small></div><div>₹${dData[id].amt} <button onclick="genPDF('${dData[id].title}','${dData[id].amt}','${dData[id].time}')" style="width:auto; padding:4px; font-size:10px; background:#000; color:#D4AF37;">PDF</button></div></div>`;
+                }
+                db.ref('expenses/'+year).on('value', (se) => {
+                    let tOut = 0; let eData = se.val(); let hOut = "";
+                    for(let id in eData) {
+                        tOut += parseFloat(eData[id].amt);
+                        hOut += `<div class="list-item" style="color:red;"><div><b>${eData[id].title}</b><br><small>${eData[id].time}</small></div><div>-₹${eData[id].amt}</div></div>`;
+                    }
+                    document.getElementById("totalIn").innerText = "₹"+tIn;
+                    document.getElementById("totalOut").innerText = "₹"+tOut;
+                    document.getElementById("totalBal").innerText = "₹"+(tIn - tOut);
+                    document.getElementById("inTab").innerHTML = hIn || "No Income";
+                    document.getElementById("outTab").innerHTML = hOut || "No Expense";
+                });
+            });
+        }
+
+        function showTab(t) {
+            document.getElementById("inTab").style.display = (t==='in') ? "block" : "none";
+            document.getElementById("outTab").style.display = (t==='out') ? "block" : "none";
+        }
+
+        // PDF Generation with Your Gold Logo
+        function genPDF(name, amt, time) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Background Holography
+            doc.setFontSize(40); doc.setTextColor(245);
+            doc.text("MMC CLUB BAGALPUR", 30, 100, { angle: 45 });
+
+            // Official Logo (Converted from your provided image)
+            const logo = "https://raw.githubusercontent.com/Sudhir-Das/mmc-club/main/logo.png";
+            
+            doc.setTextColor(0); doc.setFontSize(22);
+            doc.text("MAA MANGALA CLUB", 105, 30, { align: "center" });
+            doc.setFontSize(10); doc.setTextColor(100);
+            doc.text("TOTA SAHI, BAGALPUR, JAGATSINGHPUR - 754102", 105, 38, { align: "center" });
+            
+            doc.setDrawColor(212, 175, 55); doc.setLineWidth(1); doc.line(20, 45, 190, 45);
+
+            doc.setTextColor(0); doc.setFontSize(16); doc.text("DONATION RECEIPT", 105, 70, { align: "center" });
+            doc.setFontSize(12);
+            doc.text(`Donor Name:  ${name.toUpperCase()}`, 30, 95);
+            doc.text(`Amount:      Rs. ${amt}/-`, 30, 105);
+            doc.text(`Date & Time: ${time}`, 30, 115);
+            
+            doc.setFontSize(10); doc.text("__________________________", 140, 140);
+            doc.text("Authorized (Abanish Das)", 140, 145);
+
+            doc.save(`Receipt_${name}.pdf`);
+        }
+    </script>
+</body>
+</html>
