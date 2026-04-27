@@ -3,40 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MMC CLUB | Role-Based Ledger</title>
+    <title>MAA MANGALA CLUB | Puja Ledger</title>
+    
+    <link rel="icon" href="logo.png" type="image/png">
+    
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --gold-grad: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7); --dark-bg: #0a0a0a; --card-bg: #141414; }
         body { background: var(--dark-bg); color: #fff; font-family: 'Poppins', sans-serif; text-align: center; margin: 0; padding: 0; }
-        .container { padding: 20px; max-width: 450px; margin: auto; }
-        .card { background: var(--card-bg); border: 1px solid #333; padding: 40px 30px; border-radius: 20px; margin-top: 60px; box-shadow: 0 10px 30px rgba(191, 149, 63, 0.1); }
-        .gold-text { background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; letter-spacing: 1px; }
-        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid #333; background: #000; color: #fff; box-sizing: border-box; font-size: 14px; font-family: 'Poppins', sans-serif; }
+        .container { padding: 15px; max-width: 500px; margin: auto; }
+        .card { background: var(--card-bg); border: 1px solid #333; padding: 30px 20px; border-radius: 20px; margin-top: 50px; box-shadow: 0 10px 30px rgba(191, 149, 63, 0.1); }
+        .app-logo { width: 120px; margin-bottom: 10px; filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.5)); }
+        .gold-text { background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; letter-spacing: 1px; margin: 5px 0; }
+        .address-text { color: #888; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; margin-top: 0; margin-bottom: 20px; }
+        input, select { width: 100%; padding: 15px; margin: 8px 0; border-radius: 10px; border: 1px solid #333; background: #000; color: #fff; box-sizing: border-box; font-size: 14px; font-family: 'Poppins', sans-serif; }
         .btn-gold { background: var(--gold-grad); color: #000; font-weight: 600; width: 100%; padding: 15px; cursor: pointer; border: none; border-radius: 10px; font-size: 16px; text-transform: uppercase; margin-top: 10px; }
-        #dashboard { display: none; padding-top: 20px; }
-        .header-box { background: var(--card-bg); padding: 20px; border-bottom: 2px solid #BF953F; }
-        .badge { background: #222; border: 1px solid #BF953F; color: #FCF6BA; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: var(--card-bg); border-radius: 10px; overflow: hidden; }
+        #dashboard { display: none; padding-top: 10px; }
+        .header-box { background: var(--card-bg); padding: 15px; border-bottom: 2px solid #BF953F; }
+        .badge { background: #222; border: 1px solid #BF953F; color: #FCF6BA; padding: 5px 15px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; }
+        
+        .summary-container { display: flex; justify-content: space-between; margin-bottom: 20px; gap: 10px; }
+        .sum-box { background: #1a1a1a; padding: 15px 5px; border-radius: 10px; flex: 1; border: 1px solid #333; }
+        .sum-box h4 { margin: 0 0 5px 0; font-size: 10px; color: #aaa; text-transform: uppercase; }
+        .sum-box .amt { font-size: 18px; font-weight: bold; }
+        .text-inc { color: #4ade80; }
+        .text-exp { color: #f87171; }
+        .text-bal { color: #FCF6BA; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: var(--card-bg); border-radius: 10px; overflow: hidden; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #222; font-size: 13px; }
         th { background: #111; color: #BF953F; text-transform: uppercase; font-size: 11px; }
-        .btn-sm { padding: 5px 8px; font-size: 10px; border-radius: 5px; cursor: pointer; border: none; margin-left: 5px; font-weight: bold; }
+        .type-badge { padding: 3px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+        .bg-inc { background: rgba(74, 222, 128, 0.2); color: #4ade80; }
+        .bg-exp { background: rgba(248, 113, 113, 0.2); color: #f87171; }
+        
+        .btn-sm { padding: 6px 10px; font-size: 11px; border-radius: 5px; cursor: pointer; border: none; font-weight: bold; margin-bottom: 5px; width: 100%; }
         .btn-edit { background: #ffa500; color: #000; }
         .btn-del { background: #ff4d4d; color: #fff; }
-        .admin-panel { background: #1a1500; border: 1px dashed #BF953F; padding: 20px; border-radius: 15px; margin-bottom: 25px; display: none; }
+        .btn-pdf { background: #BF953F; color: #000; }
+        .btn-wa { background: #25D366; color: #fff; }
+        .admin-panel { background: #1a1500; border: 1px dashed #BF953F; padding: 15px; border-radius: 15px; margin-bottom: 20px; display: none; }
     </style>
 </head>
 <body>
 
     <div id="login-area" class="container">
         <div class="card">
-            <h1 class="gold-text">MMC CLUB</h1>
+            <img id="logo-img" src="logo.png" alt="MMC Logo" class="app-logo" onerror="this.style.display='none'">
+            
+            <h1 class="gold-text">MAA MANGALA CLUB</h1>
+            <p class="address-text">Totasahi, At/Po- Bagalpur<br>Dist- Jagatsinghpur, PIN- 754102</p>
             <input type="tel" id="mobileInput" placeholder="Enter Mobile Number" maxlength="10">
             <button class="btn-gold" onclick="generateOTP()">Get OTP</button>
             <div id="otp-section" style="display:none; margin-top: 20px;">
                 <div id="otp-display" style="color: #FCF6BA; font-size: 22px; font-weight: 700; letter-spacing: 4px; margin-bottom: 15px;"></div>
-                <input type="number" id="otpInput" placeholder="Enter 4-Digit OTP">
+                <input type="number" id="otpInput" placeholder="Enter OTP">
                 <button class="btn-gold" onclick="login()">Secure Login</button>
             </div>
         </div>
@@ -44,22 +69,34 @@
 
     <div id="dashboard">
         <div class="header-box">
-            <h2 class="gold-text">MMC CLUB</h2>
+            <img src="logo.png" alt="Logo" style="width: 50px; margin-bottom: 5px;" onerror="this.style.display='none'">
+            <h2 class="gold-text" style="font-size: 20px; margin-top:0;">MAA MANGALA CLUB</h2>
             <div class="badge" id="userRoleDisplay"></div>
         </div>
         <div class="container">
+            
+            <div class="summary-container">
+                <div class="sum-box"><h4 class="text-inc">Total Income</h4><div id="totInc" class="amt text-inc">₹0</div></div>
+                <div class="sum-box"><h4 class="text-exp">Total Expense</h4><div id="totExp" class="amt text-exp">₹0</div></div>
+                <div class="sum-box"><h4 class="text-bal">Balance</h4><div id="totBal" class="amt text-bal">₹0</div></div>
+            </div>
+
             <div id="admin-section" class="admin-panel">
-                <h3 style="color: #BF953F; font-size: 14px; margin-top: 0;">Add New Record</h3>
-                <input type="text" id="descInput" placeholder="Description (e.g. Tent Rent)">
+                <h3 style="color: #BF953F; font-size: 14px; margin-top: 0;">Add Puja Record</h3>
+                <select id="typeInput">
+                    <option value="income">Donation / ଆୟ</option>
+                    <option value="expense">Puja Expense / ବ୍ୟୟ</option>
+                </select>
+                <input type="text" id="descInput" placeholder="ଦାନକର୍ତ୍ତାଙ୍କ ନାମ ବା ଖର୍ଚ୍ଚ ବିବରଣୀ">
                 <input type="number" id="amtInput" placeholder="Amount (₹)">
-                <button class="btn-gold" style="padding: 10px; font-size: 12px;" onclick="addRecord()">ADD RECORD</button>
+                <button class="btn-gold" style="padding: 10px; font-size: 12px;" onclick="addRecord()">ADD TO LEDGER</button>
             </div>
             
             <div style="text-align: left; margin-top: 10px;">
-                <h3 style="margin: 0; font-size: 18px; color: #ccc;">Recent Transactions</h3>
+                <h3 style="margin: 0; font-size: 16px; color: #ccc;">Puja Transactions</h3>
             </div>
             <table>
-                <thead><tr><th>Details</th><th>Amount</th><th id="action-col" style="display:none; text-align: center;">Action</th></tr></thead>
+                <thead><tr><th>Details</th><th>Amount</th><th id="action-col" style="display:none; text-align: center; width: 80px;">Action</th></tr></thead>
                 <tbody id="records-list"></tbody>
             </table>
             <button class="btn-gold" style="background: #222; color: #ff4d4d; border: 1px solid #ff4d4d; margin-top: 30px;" onclick="logout()">Sign Out</button>
@@ -86,27 +123,12 @@
             
             if(enteredOTP == currentOTP) {
                 localStorage.setItem("mmc_user", phone);
-                
-                // OFFICIAL ROLE & NAME ASSIGNMENT
-                if(phone === "9937765417") {
-                    localStorage.setItem("mmc_role", "President");
-                    localStorage.setItem("mmc_name", "SUDHIR DAS");
-                }
-                else if(phone === "8658441544") {
-                    localStorage.setItem("mmc_role", "Manager");
-                    localStorage.setItem("mmc_name", "ABANISH DAS");
-                }
-                else if(phone === "9556082911") {
-                    localStorage.setItem("mmc_role", "Secretary");
-                    localStorage.setItem("mmc_name", "KRITI RANJAN DAS");
-                }
-                else {
-                    localStorage.setItem("mmc_role", "Member");
-                    localStorage.setItem("mmc_name", "Member");
-                }
-                
+                if(phone === "9937765417") { localStorage.setItem("mmc_role", "President"); localStorage.setItem("mmc_name", "SUDHIR DAS"); }
+                else if(phone === "8658441544") { localStorage.setItem("mmc_role", "Manager"); localStorage.setItem("mmc_name", "ABANISH DAS"); }
+                else if(phone === "9556082911") { localStorage.setItem("mmc_role", "Secretary"); localStorage.setItem("mmc_name", "KRITI RANJAN DAS"); }
+                else { localStorage.setItem("mmc_role", "Member"); localStorage.setItem("mmc_name", "Member"); }
                 location.reload();
-            } else { alert("Incorrect OTP. Please check again."); }
+            } else { alert("Incorrect OTP!"); }
         }
 
         window.onload = function() {
@@ -117,11 +139,8 @@
             if(user) {
                 document.getElementById('login-area').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
-                
-                // Display Name and Role
                 document.getElementById('userRoleDisplay').innerText = role + " | " + name;
                 
-                // Show Admin Controls if President, Manager, or Secretary
                 if(["President", "Manager", "Secretary"].includes(role)) {
                     document.getElementById('admin-section').style.display = 'block';
                     document.getElementById('action-col').style.display = 'table-cell';
@@ -131,60 +150,140 @@
         }
 
         function addRecord() {
+            const type = document.getElementById('typeInput').value;
             const desc = document.getElementById('descInput').value;
             const amt = document.getElementById('amtInput').value;
+            const time = Date.now();
+            
             if(desc && amt) {
-                db.ref('records').push({ desc, amount: amt });
+                db.ref('records').push({ type: type, desc: desc, amount: Number(amt), timestamp: time });
                 document.getElementById('descInput').value = '';
                 document.getElementById('amtInput').value = '';
-            } else {
-                alert("Please fill both details!");
-            }
+            } else { alert("Please fill both details!"); }
         }
 
         function loadData(role) {
             db.ref('records').on('value', (snap) => {
                 const list = document.getElementById('records-list');
                 list.innerHTML = "";
-                let hasData = false;
+                let totalInc = 0; let totalExp = 0; let hasData = false;
                 
                 snap.forEach((child) => {
                     hasData = true;
                     const d = child.val();
                     const id = child.key;
-                    let actions = "";
                     
-                    // Show Edit/Delete buttons only to Admins
+                    if(d.type === 'income') totalInc += Number(d.amount);
+                    else totalExp += Number(d.amount);
+                    
+                    let typeBadge = d.type === 'income' ? '<span class="type-badge bg-inc">IN +</span>' : '<span class="type-badge bg-exp">OUT -</span>';
+                    let amtColor = d.type === 'income' ? '#4ade80' : '#f87171';
+                    
+                    let actions = "";
                     if(["President", "Manager", "Secretary"].includes(role)) {
-                        actions = `<td style="text-align: center;">
-                            <button class="btn-sm btn-edit" onclick="editRecord('${id}','${d.desc}',${d.amount})">Edit</button>
-                            <button class="btn-sm btn-del" onclick="deleteRecord('${id}')">Del</button>
+                        let extraBtns = "";
+                        if(d.type === 'income') {
+                            const waMessage = encodeURIComponent(`ନମସ୍କାର ${d.desc} ବାବୁ,\n\nମାଆ ମଙ୍ଗଳା କ୍ଲବ୍ (ତୋଟାସାହି, ବାଗଲପୁର) ତରଫରୁ ଆପଣଙ୍କୁ ଅଶେଷ ଧନ୍ୟବାଦ। 🙏\nପୂଜା ପାଇଁ ଆପଣଙ୍କର ₹${d.amount} ର ଦାନ ଆମେ ସାଦରେ ଗ୍ରହଣ କଲୁ। ମାଆ ଆପଣଙ୍କର ମଙ୍ଗଳ କରନ୍ତୁ।\n\n- ଅବନୀଶ ଦାସ (Manager)`);
+                            extraBtns = `
+                                <button class="btn-sm btn-pdf" onclick="downloadReceipt('${d.desc}', ${d.amount}, ${d.timestamp || Date.now()})">📜 Receipt</button>
+                                <button class="btn-sm btn-wa" onclick="window.open('https://wa.me/?text=${waMessage}', '_blank')">💬 Share</button>
+                            `;
+                        }
+                        actions = `<td style="vertical-align: top;">
+                            ${extraBtns}
+                            <div style="display:flex; gap:5px;">
+                                <button class="btn-sm btn-edit" onclick="editRecord('${id}','${d.desc}',${d.amount},'${d.type}')">Edit</button>
+                                <button class="btn-sm btn-del" onclick="deleteRecord('${id}')">Del</button>
+                            </div>
                         </td>`;
                     }
-                    list.innerHTML += `<tr><td>${d.desc}</td><td style="color:#FCF6BA; font-weight:bold;">₹${d.amount}</td>${actions}</tr>`;
+                    
+                    list.innerHTML += `<tr>
+                        <td><div style="font-size: 15px; font-weight: bold; color: #fff;">${d.desc}</div><div style="margin-top:4px;">${typeBadge}</div></td>
+                        <td style="color:${amtColor}; font-weight:bold; font-size:16px; vertical-align: top;">₹${d.amount}</td>
+                        ${actions}
+                    </tr>`;
                 });
+                
+                document.getElementById('totInc').innerText = '₹' + totalInc;
+                document.getElementById('totExp').innerText = '₹' + totalExp;
+                document.getElementById('totBal').innerText = '₹' + (totalInc - totalExp);
                 
                 if(!hasData) {
                     const colspan = ["President", "Manager", "Secretary"].includes(role) ? 3 : 2;
-                    list.innerHTML = `<tr><td colspan="${colspan}" style="text-align:center; color:#777; padding: 20px;">No records available.</td></tr>`;
+                    list.innerHTML = `<tr><td colspan="${colspan}" style="text-align:center; color:#777; padding: 20px;">No Puja records available yet.</td></tr>`;
                 }
             });
         }
 
-        function editRecord(id, oldDesc, oldAmt) {
+        // PDF Generation with Logo
+        window.jsPDF = window.jspdf.jsPDF;
+        function downloadReceipt(donorName, amount, time) {
+            const doc = new jsPDF();
+            
+            // Draw Borders
+            doc.setDrawColor(212, 175, 55); doc.setLineWidth(1.5); doc.rect(10, 10, 190, 150);
+            doc.setLineWidth(0.5); doc.rect(12, 12, 186, 146);
+
+            // Add Logo to PDF (If available)
+            const logoEl = document.getElementById('logo-img');
+            if (logoEl && logoEl.complete && logoEl.naturalHeight !== 0) {
+                try {
+                    doc.addImage(logoEl, 'PNG', 85, 15, 40, 30);
+                } catch(e) { console.log("Logo load error", e); }
+            }
+
+            // Header Texts
+            doc.setFont("helvetica", "bold"); doc.setFontSize(26); doc.setTextColor(212, 175, 55);
+            doc.text("MAA MANGALA CLUB", 105, 55, null, null, "center");
+
+            doc.setFont("helvetica", "normal"); doc.setFontSize(11); doc.setTextColor(80, 80, 80);
+            doc.text("Totasahi, At/Po- Bagalpur, Dist- Jagatsinghpur, PIN- 754102, Odisha", 105, 63, null, null, "center");
+
+            // Line
+            doc.setDrawColor(200, 200, 200); doc.line(15, 70, 195, 70);
+
+            // Title
+            doc.setFont("helvetica", "bold"); doc.setFontSize(18); doc.setTextColor(0, 0, 0);
+            doc.text("DONATION RECEIPT", 105, 82, null, null, "center");
+
+            // Date & No
+            let d = new Date(time);
+            doc.setFontSize(11); doc.setFont("helvetica", "normal");
+            doc.text("Date: " + d.toLocaleDateString('en-IN'), 20, 95);
+            doc.text("Receipt No: MMC" + time.toString().slice(-6), 140, 95);
+
+            // DONOR NAME
+            doc.setFontSize(14); doc.setTextColor(0, 0, 0);
+            doc.text("Received with thanks from :", 20, 110);
+            
+            doc.setFontSize(22); doc.setFont("helvetica", "bold"); doc.setTextColor(212, 175, 55);
+            doc.text(donorName.toUpperCase(), 20, 120);
+
+            // Amount
+            doc.setFontSize(14); doc.setFont("helvetica", "normal"); doc.setTextColor(0, 0, 0);
+            doc.text("An amount of Rupees : ", 20, 135);
+            doc.setFont("helvetica", "bold"); doc.setTextColor(212, 175, 55);
+            doc.text("Rs. " + amount + " /-", 75, 135);
+
+            // Signature
+            doc.setTextColor(0, 0, 0); doc.setDrawColor(0, 0, 0);
+            doc.line(140, 145, 190, 145);
+            doc.setFontSize(10);
+            doc.text("Manager (ABANISH DAS)", 142, 150);
+            doc.text("Authorized Signature", 147, 155);
+
+            doc.save("MMC_Receipt_" + donorName + ".pdf");
+        }
+
+        function editRecord(id, oldDesc, oldAmt, oldType) {
             const newDesc = prompt("Edit Description:", oldDesc);
             const newAmt = prompt("Edit Amount (₹):", oldAmt);
-            if(newDesc !== null && newAmt !== null && newDesc !== "" && newAmt !== "") {
-                db.ref('records/' + id).update({ desc: newDesc, amount: newAmt });
-            }
+            if(newDesc && newAmt) { db.ref('records/' + id).update({ desc: newDesc, amount: Number(newAmt) }); }
         }
-
         function deleteRecord(id) {
-            if(confirm("Are you sure you want to delete this record permanently?")) {
-                db.ref('records/' + id).remove();
-            }
+            if(confirm("Are you sure you want to delete this record?")) { db.ref('records/' + id).remove(); }
         }
-
         function logout() { localStorage.clear(); location.reload(); }
     </script>
 </body>
