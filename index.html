@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAA MANGALA CLUB | Annual Ledger</title>
+    <title>MAA MANGALA CLUB | Secure Ledger</title>
     <link rel="icon" href="3d-1.png" type="image/png">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -13,69 +13,42 @@
         :root { --gold: #D4AF37; --gold-grad: linear-gradient(135deg, #D4AF37, #FFF2CD, #AA8222); --dark: #080808; --card: #121212; }
         body { background: var(--dark); color: #fff; font-family: 'Poppins', sans-serif; text-align: center; margin: 0; padding: 0; }
         .container { padding: 15px; max-width: 600px; margin: auto; }
-        
-        /* Modern Cards */
         .card { background: var(--card); border: 1px solid #222; padding: 30px; border-radius: 16px; margin-top: 30px; box-shadow: 0 8px 32px rgba(212, 175, 55, 0.05); }
         .app-logo { width: 110px; filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.8)); margin-bottom: 5px; }
         .gold-text { background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; margin: 5px 0; letter-spacing: 1px; }
-        
-        /* Inputs & Buttons */
         input, select { width: 100%; padding: 14px; margin: 8px 0; border-radius: 8px; border: 1px solid #333; background: #0a0a0a; color: #fff; box-sizing: border-box; font-family: 'Poppins', sans-serif; font-size: 14px; transition: 0.3s; }
         input:focus, select:focus { border-color: var(--gold); outline: none; }
         .btn-gold { background: var(--gold-grad); color: #000; font-weight: 700; width: 100%; padding: 14px; cursor: pointer; border: none; border-radius: 8px; font-size: 15px; text-transform: uppercase; margin-top: 15px; transition: 0.3s; letter-spacing: 1px; }
-        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2); }
-        
-        /* Tabs */
         .tab-box { display: flex; border-bottom: 1px solid #333; margin-bottom: 25px; }
-        .tab-btn { flex: 1; padding: 12px; cursor: pointer; color: #666; font-weight: 600; border-bottom: 3px solid transparent; font-size: 13px; transition: 0.3s; }
+        .tab-btn { flex: 1; padding: 12px; cursor: pointer; color: #666; font-weight: 600; border-bottom: 3px solid transparent; font-size: 11px; transition: 0.3s; text-transform: uppercase; }
         .tab-btn.active { color: var(--gold); border-bottom: 3px solid var(--gold); }
         .form-section { display: none; }
         .form-section.active { display: block; animation: fadeIn 0.5s ease; }
-        
-        /* Dashboard Header */
         #dashboard { display: none; }
         .header-box { background: var(--card); padding: 20px 15px; border-bottom: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; gap: 15px; }
         .badge { background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold); color: #FFF2CD; padding: 6px 16px; border-radius: 30px; font-size: 12px; font-weight: 600; display: inline-block; }
-        
-        /* Financial Year Banner */
         .fy-banner { background: #1a1500; border: 1px solid var(--gold); padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin: 20px 0; }
         .fy-banner h3 { margin: 0; font-size: 15px; color: var(--gold); text-transform: uppercase; }
         .fy-banner select { width: auto; padding: 8px 15px; margin: 0; background: #000; border: 1px solid var(--gold); color: var(--gold); font-weight: bold; border-radius: 6px; }
-
-        /* Summary Boxes */
         .summary-container { display: flex; gap: 12px; margin-bottom: 25px; }
         .sum-box { background: #111; padding: 20px 10px; border-radius: 12px; flex: 1; border: 1px solid #222; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
         .sum-box h4 { margin: 0 0 8px 0; font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-        .sum-box .amt { font-size: 20px; font-weight: 700; }
+        .sum-box .amt { font-size: 18px; font-weight: 700; }
         .text-inc { color: #4ade80; } .text-exp { color: #f87171; } .text-bal { color: var(--gold); }
-
-        /* Professional Data Table */
         table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 10px; background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #222; }
         th, td { padding: 15px 12px; text-align: left; border-bottom: 1px solid #1a1a1a; font-size: 13px; }
         th { background: #0a0a0a; color: #888; text-transform: uppercase; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; border-bottom: 1px solid #333; }
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background: #181818; }
-        
         .type-badge { padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; }
         .bg-inc { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
         .bg-exp { background: rgba(248, 113, 113, 0.15); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.3); }
         .cat-badge { background: #222; color: #ccc; padding: 3px 8px; border-radius: 4px; font-size: 10px; margin-left: 6px; border: 1px solid #444; }
         .time-txt { font-size: 11px; color: #777; display: block; margin-top: 6px; }
-        
-        /* Action Buttons */
         .action-flex { display: flex; gap: 5px; flex-wrap: wrap; }
         .btn-sm { padding: 6px 12px; font-size: 11px; border-radius: 6px; cursor: pointer; border: none; font-weight: 600; flex: 1; transition: 0.2s; }
-        .btn-sm:hover { opacity: 0.8; }
         .btn-del { background: rgba(248, 113, 113, 0.1); color: #f87171; border: 1px solid #f87171; }
         .btn-pdf { background: rgba(212, 175, 55, 0.1); color: var(--gold); border: 1px solid var(--gold); }
         .btn-wa { background: rgba(37, 211, 102, 0.1); color: #25D366; border: 1px solid #25D366; }
-        
-        /* Admin Panel */
         .admin-panel { background: #0d0d0d; border: 1px solid #333; padding: 20px; border-radius: 12px; margin-bottom: 25px; display: none; }
-        .mem-tot { font-size: 11px; color: #999; line-height: 1.6; }
-        .val-ghara { color: var(--gold); font-weight: 600; }
-        .val-mem { color: #4ade80; font-weight: 600; }
-        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -85,26 +58,21 @@
         <div class="card">
             <img id="logo-img" src="3d-1.png" alt="MMC Logo" class="app-logo" onerror="this.style.display='none'">
             <h1 class="gold-text">MAA MANGALA CLUB</h1>
-            <p style="color: #666; font-size: 12px; margin-bottom: 25px; letter-spacing: 1px;">DIGITAL ANNUAL LEDGER</p>
-            
+            <p style="color: #666; font-size: 12px; margin-bottom: 25px; letter-spacing: 1px;">SECURE DIGITAL LEDGER</p>
             <div class="tab-box">
                 <div id="tab-mem" class="tab-btn active" onclick="switchLogin('member')">MEMBER</div>
                 <div id="tab-adm" class="tab-btn" onclick="switchLogin('admin')">ADMINISTRATION</div>
             </div>
-
             <div id="form-member" class="form-section active">
-                <p style="font-size: 12px; color: #888; margin-bottom: 15px;">Access restricted to registered members</p>
                 <input type="tel" id="memPhone" placeholder="Enter Registered Mobile No." maxlength="10">
                 <button class="btn-gold" onclick="requestOTP()">GENERATE OTP</button>
-                <div id="otp-section" style="display:none; margin-top: 20px; padding-top: 15px; border-top: 1px solid #222;">
+                <div id="otp-section" style="display:none; margin-top: 20px;">
                     <div id="otp-display" style="color: var(--gold); font-size: 24px; font-weight: 700; letter-spacing: 5px; margin-bottom: 15px;"></div>
-                    <input type="number" id="memOtp" placeholder="Enter 4-Digit OTP">
+                    <input type="number" id="memOtp" placeholder="Enter OTP">
                     <button class="btn-gold" onclick="verifyMemberLogin()">VERIFY & PROCEED</button>
                 </div>
             </div>
-
             <div id="form-admin" class="form-section">
-                <p style="font-size: 12px; color: #888; margin-bottom: 15px;">President / Secretary / Manager Login</p>
                 <input type="tel" id="admPhone" placeholder="Admin Mobile Number" maxlength="10">
                 <input type="password" id="admPass" placeholder="Security Password">
                 <button class="btn-gold" onclick="adminLogin()">SECURE LOGIN</button>
@@ -120,76 +88,52 @@
                 <div class="badge" id="userRoleDisplay" style="margin-top: 5px;"></div>
             </div>
         </div>
-        
         <div class="container">
-            
             <div id="admin-controls" style="display:none; margin-bottom: 20px;">
                 <div class="tab-box" style="margin-bottom: 15px;">
-                    <div id="tab-ledger" class="tab-btn active" onclick="switchAdminTab('ledger')">📝 RECORD ENTRY</div>
-                    <div id="tab-users" class="tab-btn" onclick="switchAdminTab('users')">👥 MEMBERS DIR.</div>
+                    <div id="tab-ledger" class="tab-btn active" onclick="switchAdminTab('ledger')">📝 ENTRY</div>
+                    <div id="tab-users" class="tab-btn" onclick="switchAdminTab('users')">👥 MEMBERS</div>
+                    <div id="tab-deleted" class="tab-btn" style="display:none;" onclick="switchAdminTab('deleted')">🗑️ TRASH</div>
                 </div>
-
                 <div id="admin-ledger" class="admin-panel active" style="display:block;">
                     <select id="typeInput" onchange="toggleAddForm()">
                         <option value="income">Income / ଆୟ (Credit)</option>
                         <option value="expense">Expense / ବ୍ୟୟ (Debit)</option>
                     </select>
-                    
                     <div id="inc-form">
                         <select id="incomeCategory">
                             <option value="ଘର ଚାନ୍ଦା (House Chanda)">🏠 ଘର ଚାନ୍ଦା (House Chanda)</option>
                             <option value="ମେମ୍ବର ଚାନ୍ଦା (Member Chanda)">👤 ମେମ୍ବର ଚାନ୍ଦା (Member Chanda)</option>
                             <option value="ଅନ୍ୟାନ୍ୟ ଦାନ (Other Donation)">🎁 ଅନ୍ୟାନ୍ୟ ଦାନ (Other Donation)</option>
                         </select>
-                        <select id="memberSelect" onchange="checkGuest()">
-                            <option value="guest">Other / Non-Member</option>
-                        </select>
+                        <select id="memberSelect" onchange="checkGuest()"><option value="guest">Other / Non-Member</option></select>
                         <input type="text" id="guestInput" placeholder="ଦାନକର୍ତ୍ତାଙ୍କ ନାମ (Name)">
                     </div>
-                    
-                    <div id="exp-form" style="display:none;">
-                        <input type="text" id="descInput" placeholder="ଖର୍ଚ୍ଚ ବିବରଣୀ (Expense Purpose)">
-                    </div>
-
-                    <input type="number" id="amtInput" placeholder="Amount / ଟଙ୍କା (₹)">
-                    <button class="btn-gold" style="padding: 12px; font-size: 13px;" onclick="addRecord()">SAVE TO LEDGER</button>
+                    <div id="exp-form" style="display:none;"><input type="text" id="descInput" placeholder="ଖର୍ଚ୍ଚ ବିବରଣୀ (Expense Purpose)"></div>
+                    <input type="number" id="amtInput" placeholder="Amount (₹)">
+                    <button class="btn-gold" style="padding: 12px;" onclick="addRecord()">SAVE TO LEDGER</button>
                 </div>
-
                 <div id="admin-users" class="admin-panel">
-                    <h3 style="color: var(--gold); font-size: 14px; margin: 0 0 15px 0;">Register New Member</h3>
                     <input type="text" id="newMemName" placeholder="Full Name">
                     <input type="tel" id="newMemPhone" placeholder="Mobile Number" maxlength="10">
-                    <button class="btn-gold" style="padding: 12px; font-size: 13px; background: #25D366; color:#fff;" onclick="addMember()">ADD MEMBER</button>
-                    
-                    <h4 style="color: #888; margin-top: 25px; text-align: left; text-transform: uppercase; font-size: 11px;">Member Contributions (Selected Year):</h4>
-                    <table id="members-table" style="background: #0a0a0a;">
-                        <thead><tr><th>Member Info</th><th>Paid Status</th><th>Action</th></tr></thead>
-                        <tbody id="members-list"></tbody>
-                    </table>
+                    <button class="btn-gold" style="background: #25D366; color:#fff;" onclick="addMember()">ADD MEMBER</button>
+                    <table id="members-table"><tbody id="members-list"></tbody></table>
+                </div>
+                <div id="admin-deleted" class="admin-panel">
+                    <h3 style="color: #f87171; font-size: 14px;">Trash History (President Only)</h3>
+                    <table id="deleted-table"><tbody id="deleted-list"></tbody></table>
                 </div>
             </div>
-
             <div class="fy-banner">
-                <h3>Financial Year Ledger</h3>
-                <select id="yearFilter" onchange="loadRecords()">
-                    </select>
+                <h3>Financial Year</h3>
+                <select id="yearFilter" onchange="loadRecords()"></select>
             </div>
-
             <div class="summary-container">
-                <div class="sum-box"><h4 class="text-inc">Total Income</h4><div id="totInc" class="amt text-inc">₹0</div></div>
-                <div class="sum-box"><h4 class="text-exp">Total Expense</h4><div id="totExp" class="amt text-exp">₹0</div></div>
-                <div class="sum-box"><h4 class="text-bal">Net Balance</h4><div id="totBal" class="amt text-bal">₹0</div></div>
+                <div class="sum-box"><h4 class="text-inc">Income</h4><div id="totInc" class="amt text-inc">₹0</div></div>
+                <div class="sum-box"><h4 class="text-exp">Expense</h4><div id="totExp" class="amt text-exp">₹0</div></div>
+                <div class="sum-box"><h4 class="text-bal">Balance</h4><div id="totBal" class="amt text-bal">₹0</div></div>
             </div>
-            
-            <div style="text-align: left; margin: 20px 0 10px 0;">
-                <h3 style="margin: 0; font-size: 15px; color: #fff;">Transaction History</h3>
-            </div>
-
-            <table>
-                <thead><tr><th>Particulars</th><th>Amount (₹)</th><th id="action-col" style="display:none; text-align: center; width: 100px;">Actions</th></tr></thead>
-                <tbody id="records-list"></tbody>
-            </table>
-            
+            <table><tbody id="records-list"></tbody></table>
             <button class="btn-gold" style="background: transparent; border: 1px solid #ff4d4d; color: #ff4d4d; margin-top: 40px;" onclick="logout()">SECURE SIGN OUT</button>
         </div>
     </div>
@@ -200,17 +144,13 @@
         const db = firebase.database();
         let currentOTP;
 
-        // Admin Credentials
+        // Admin Credentials Updated
         const ADMIN_DB = {
-            "9937765417": { role: "President", name: "SUDHIR DAS", pass: "CHAMPIONS2026" },
+            "9937765417": { role: "President", name: "SUDHIR DAS", pass: "CHAMP993868" },
             "8658441544": { role: "Manager", name: "ABANISH DAS", pass: "CHAMPIONS2026" },
             "9556082911": { role: "Secretary", name: "KRITI RANJAN DAS", pass: "CHAMPIONS2026" }
         };
 
-        let allMembers = [];
-        let memberPaidTotals = {}; 
-
-        // UI Interactions
         function switchLogin(type) {
             document.querySelectorAll('.form-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-box .tab-btn').forEach(el => el.classList.remove('active'));
@@ -221,292 +161,105 @@
         function switchAdminTab(type) {
             document.querySelectorAll('.admin-panel').forEach(el => el.style.display = 'none');
             document.querySelectorAll('#admin-controls .tab-btn').forEach(el => el.classList.remove('active'));
-            if(type === 'ledger') { document.getElementById('admin-ledger').style.display = 'block'; document.getElementById('tab-ledger').classList.add('active'); } 
-            else { document.getElementById('admin-users').style.display = 'block'; document.getElementById('tab-users').classList.add('active'); }
+            document.getElementById('admin-'+type).style.display = 'block';
+            document.getElementById('tab-'+type).classList.add('active');
         }
 
-        function toggleAddForm() {
-            let t = document.getElementById('typeInput').value;
-            if(t === 'income') { document.getElementById('inc-form').style.display = 'block'; document.getElementById('exp-form').style.display = 'none'; } 
-            else { document.getElementById('inc-form').style.display = 'none'; document.getElementById('exp-form').style.display = 'block'; }
-        }
-
-        function checkGuest() {
-            let m = document.getElementById('memberSelect').value;
-            document.getElementById('guestInput').style.display = (m === 'guest') ? 'block' : 'none';
-        }
-
-        // Authentication logic
         function adminLogin() {
             const phone = document.getElementById('admPhone').value; const pass = document.getElementById('admPass').value;
             if(ADMIN_DB[phone] && ADMIN_DB[phone].pass === pass) {
                 localStorage.setItem("mmc_user", phone); localStorage.setItem("mmc_role", ADMIN_DB[phone].role); localStorage.setItem("mmc_name", ADMIN_DB[phone].name);
                 location.reload();
-            } else { alert("Access Denied! Incorrect Admin Credentials."); }
+            } else { alert("Invalid Credentials!"); }
         }
 
         function requestOTP() {
             const phone = document.getElementById('memPhone').value;
-            if(phone.length !== 10) { alert("Enter valid 10-digit mobile number"); return; }
             db.ref('members/' + phone).once('value', (snap) => {
                 if(snap.exists()) {
                     currentOTP = Math.floor(1000 + Math.random() * 9000);
                     document.getElementById('otp-display').innerText = currentOTP;
                     document.getElementById('otp-section').style.display = 'block';
-                    localStorage.setItem("temp_mem_name", snap.val().name);
-                } else { alert("Your number is not registered in the Club Directory."); }
+                } else { alert("Not registered!"); }
             });
         }
 
         function verifyMemberLogin() {
-            const entered = document.getElementById('memOtp').value; const phone = document.getElementById('memPhone').value;
-            if(entered == currentOTP) {
-                localStorage.setItem("mmc_user", phone); localStorage.setItem("mmc_role", "Member"); localStorage.setItem("mmc_name", localStorage.getItem("temp_mem_name"));
+            if(document.getElementById('memOtp').value == currentOTP) {
+                localStorage.setItem("mmc_user", document.getElementById('memPhone').value);
+                localStorage.setItem("mmc_role", "Member");
                 location.reload();
-            } else { alert("Incorrect OTP!"); }
+            } else { alert("Wrong OTP!"); }
         }
 
-        // App Initialization
         window.onload = function() {
-            const user = localStorage.getItem("mmc_user"); const role = localStorage.getItem("mmc_role"); const name = localStorage.getItem("mmc_name");
-            
-            // Populate Financial Years (Current year down to 2024)
+            const role = localStorage.getItem("mmc_role");
             const yearDrop = document.getElementById('yearFilter'); const currentYear = new Date().getFullYear();
             for(let i = currentYear; i >= 2024; i--) { yearDrop.innerHTML += `<option value="${i}">${i}</option>`; }
-            
-            if(user) {
+            if(localStorage.getItem("mmc_user")) {
                 document.getElementById('login-area').style.display = 'none'; document.getElementById('dashboard').style.display = 'block';
-                document.getElementById('userRoleDisplay').innerText = role + " | " + name;
-                
+                document.getElementById('userRoleDisplay').innerText = role;
                 if(["President", "Manager", "Secretary"].includes(role)) {
-                    document.getElementById('admin-controls').style.display = 'block'; document.getElementById('action-col').style.display = 'table-cell';
-                    fetchMembers(); 
+                    document.getElementById('admin-controls').style.display = 'block'; fetchMembers();
+                    if(role === "President") { document.getElementById('tab-deleted').style.display = 'block'; loadDeletedRecords(); }
                 }
-                loadRecords(); // Load ledger for the selected year
+                loadRecords();
             }
         }
 
-        // Member Management
-        function addMember() {
-            const name = document.getElementById('newMemName').value; const phone = document.getElementById('newMemPhone').value;
-            if(name && phone.length === 10) {
-                db.ref('members/' + phone).set({ name: name, phone: phone });
-                alert("New Member Registered!"); document.getElementById('newMemName').value = ''; document.getElementById('newMemPhone').value = '';
-            } else { alert("Please provide valid details."); }
-        }
-        
-        function removeMember(phone) { if(confirm("Are you sure? This member will lose login access.")) { db.ref('members/' + phone).remove(); } }
-
-        function fetchMembers() {
-            db.ref('members').on('value', (snap) => {
-                allMembers = []; snap.forEach(child => { allMembers.push(child.val()); });
-                updateMemberUI();
-            });
-        }
-
-        function updateMemberUI() {
-            const drop = document.getElementById('memberSelect');
-            if(drop) {
-                let html = '<option value="guest">Other / Non-Member</option>';
-                allMembers.forEach(m => { html += `<option value="${m.phone}">${m.name} - ${m.phone}</option>`; });
-                drop.innerHTML = html;
-            }
-
-            const list = document.getElementById('members-list');
-            if(list) {
-                list.innerHTML = "";
-                allMembers.forEach(m => {
-                    const p = memberPaidTotals[m.phone] || { ghara: 0, member: 0 };
-                    list.innerHTML += `<tr>
-                        <td><b style="color:#fff;">${m.name}</b><br><span style="color:#888;font-size:10px;">📞 ${m.phone}</span></td>
-                        <td class="mem-tot">
-                            ଘର ଚାନ୍ଦା: <span class="val-ghara">₹${p.ghara}</span><br>
-                            ମେମ୍ବର: <span class="val-mem">₹${p.member}</span>
-                        </td>
-                        <td><button class="btn-sm btn-del" style="width:auto;" onclick="removeMember('${m.phone}')">Del</button></td>
-                    </tr>`;
-                });
-            }
-        }
-
-        // Ledger Core Logic
         function addRecord() {
             const type = document.getElementById('typeInput').value; const amt = document.getElementById('amtInput').value;
-            let desc = "", phone = "", category = "";
-
-            if(!amt) { alert("Please enter the amount"); return; }
-
-            if(type === 'income') {
-                category = document.getElementById('incomeCategory').value;
-                const memVal = document.getElementById('memberSelect').value;
-                if(memVal === 'guest') {
-                    desc = document.getElementById('guestInput').value;
-                    if(!desc) { alert("Enter the donor's name"); return; }
-                } else {
-                    const sel = document.getElementById('memberSelect');
-                    desc = sel.options[sel.selectedIndex].text.split(' - ')[0];
-                    phone = memVal;
-                }
-            } else {
-                category = "ବ୍ୟୟ (Expense)";
-                desc = document.getElementById('descInput').value;
-                if(!desc) { alert("Enter expense particulars"); return; }
-            }
-
-            db.ref('records').push({ type, desc, phone, category, amount: Number(amt), timestamp: Date.now() });
-            document.getElementById('guestInput').value = ''; document.getElementById('descInput').value = ''; document.getElementById('amtInput').value = '';
+            let desc = (type === 'income') ? (document.getElementById('memberSelect').value === 'guest' ? document.getElementById('guestInput').value : document.getElementById('memberSelect').options[document.getElementById('memberSelect').selectedIndex].text.split(' - ')[0]) : document.getElementById('descInput').value;
+            db.ref('records').push({ type, desc, amount: Number(amt), category: document.getElementById('incomeCategory').value, timestamp: Date.now() });
+            location.reload();
         }
 
         function loadRecords() {
-            const role = localStorage.getItem("mmc_role");
             const selectedYear = parseInt(document.getElementById('yearFilter').value);
-            
             db.ref('records').on('value', (snap) => {
                 const list = document.getElementById('records-list'); list.innerHTML = "";
-                let totalInc = 0; let totalExp = 0; let hasData = false;
-                
-                // Reset Member Totals for the Selected Year
-                memberPaidTotals = {}; 
-                allMembers.forEach(m => { memberPaidTotals[m.phone] = { ghara: 0, member: 0, other: 0 }; });
-                
-                let dataArr = []; snap.forEach(child => { dataArr.push({ id: child.key, ...child.val() }); });
-                dataArr.reverse(); // Newest first
-                
-                dataArr.forEach((d) => {
-                    const recordYear = new Date(d.timestamp).getFullYear();
-                    // FILTER: Only process records matching the selected Financial Year
-                    if(recordYear !== selectedYear) return;
-                    hasData = true;
-                    
-                    if(d.type === 'income') {
-                        totalInc += Number(d.amount);
-                        if(d.phone) {
-                            memberPaidTotals[d.phone] = memberPaidTotals[d.phone] || { ghara: 0, member: 0, other: 0 };
-                            if(d.category && d.category.includes('ଘର ଚାନ୍ଦା')) memberPaidTotals[d.phone].ghara += Number(d.amount);
-                            else if(d.category && d.category.includes('ମେମ୍ବର ଚାନ୍ଦା')) memberPaidTotals[d.phone].member += Number(d.amount);
-                            else memberPaidTotals[d.phone].other += Number(d.amount);
-                        }
-                    } else { totalExp += Number(d.amount); }
-                    
-                    let dateObj = new Date(d.timestamp);
-                    let timeString = dateObj.toLocaleDateString('en-IN') + " • " + dateObj.toLocaleTimeString('en-IN', {hour: '2-digit', minute:'2-digit'});
-                    let phoneDisplay = d.phone ? `<span style="color:#777; font-size:10px; margin-left:8px;">📞 ${d.phone}</span>` : "";
-                    
-                    let typeBadge = d.type === 'income' ? '<span class="type-badge bg-inc">IN +</span>' : '<span class="type-badge bg-exp">OUT -</span>';
-                    let displayCat = d.category ? d.category.split(' (')[0] : "";
-                    let catBadge = displayCat ? `<span class="cat-badge">${displayCat}</span>` : "";
-                    let amtColor = d.type === 'income' ? '#4ade80' : '#f87171';
-                    
-                    let actions = "";
-                    if(["President", "Manager", "Secretary"].includes(role)) {
-                        let extraBtns = "";
-                        if(d.type === 'income') {
-                            let phoneArg = d.phone ? `'${d.phone}'` : `null`;
-                            let catArg = d.category ? `'${d.category}'` : `'Donation'`;
-                            const waMessage = encodeURIComponent(`ନମସ୍କାର ${d.desc} ବାବୁ,\n\nମାଆ ମଙ୍ଗଳା କ୍ଲବ୍ (ତୋଟାସାହି, ବାଗଲପୁର) ତରଫରୁ ଆପଣଙ୍କୁ ଅଶେଷ ଧନ୍ୟବାଦ। 🙏\nଆର୍ଥିକ ବର୍ଷ ${selectedYear} ପାଇଁ ଆପଣଙ୍କର ₹${d.amount} ର ${displayCat} ଆମେ ସାଦରେ ଗ୍ରହଣ କଲୁ।\n\n- ଅବନୀଶ ଦାସ (Manager)`);
-                            
-                            extraBtns = `
-                                <button class="btn-sm btn-pdf" onclick="downloadReceipt('${d.desc}', ${phoneArg}, ${d.amount}, ${d.timestamp}, ${catArg}, ${selectedYear})">📜 PDF</button>
-                                <button class="btn-sm btn-wa" onclick="window.open('https://wa.me/?text=${waMessage}', '_blank')">💬 WA</button>
-                            `;
-                        }
-                        actions = `<td style="vertical-align: middle;">
-                            <div class="action-flex">
-                                ${extraBtns}
-                                <button class="btn-sm btn-del" onclick="deleteRecord('${d.id}')">Del</button>
-                            </div>
-                        </td>`;
+                let tI = 0, tE = 0;
+                snap.forEach(child => {
+                    const d = child.val();
+                    if(new Date(d.timestamp).getFullYear() === selectedYear) {
+                        if(d.type === 'income') tI += d.amount; else tE += d.amount;
+                        list.innerHTML += `<tr><td>${d.desc}<br><span class="time-txt">${new Date(d.timestamp).toLocaleString()}</span></td><td>₹${d.amount}</td>${localStorage.getItem("mmc_role") === "President" ? `<td><button class="btn-sm btn-del" onclick="moveToTrash('${child.key}')">Del</button></td>` : ""}</tr>`;
                     }
-                    
-                    list.innerHTML += `<tr>
-                        <td>
-                            <div style="font-size: 14px; font-weight: 600; color: #fff;">${d.desc} ${phoneDisplay}</div>
-                            <div style="margin-top:5px;">${typeBadge}${catBadge}</div>
-                            <span class="time-txt">${timeString}</span>
-                        </td>
-                        <td style="color:${amtColor}; font-weight:700; font-size:16px; vertical-align: middle;">₹${d.amount}</td>
-                        ${actions}
-                    </tr>`;
                 });
-                
-                // Update Dashboard Totals
-                document.getElementById('totInc').innerText = '₹' + totalInc.toLocaleString('en-IN'); 
-                document.getElementById('totExp').innerText = '₹' + totalExp.toLocaleString('en-IN'); 
-                document.getElementById('totBal').innerText = '₹' + (totalInc - totalExp).toLocaleString('en-IN');
-                
-                if(!hasData) { 
-                    const colspan = ["President", "Manager", "Secretary"].includes(role) ? 3 : 2; 
-                    list.innerHTML = `<tr><td colspan="${colspan}" style="text-align:center; color:#666; padding: 30px;">No transaction records found for Financial Year ${selectedYear}.</td></tr>`; 
-                }
-                updateMemberUI(); // Update Admin panel member totals based on the selected year
+                document.getElementById('totInc').innerText = "₹" + tI; document.getElementById('totExp').innerText = "₹" + tE; document.getElementById('totBal').innerText = "₹" + (tI - tE);
             });
         }
 
-        // --- PROFESSIONAL PDF RECEIPT ---
-        window.jsPDF = window.jspdf.jsPDF;
-        function downloadReceipt(donorName, phone, amount, time, category, year) {
-            const doc = new jsPDF();
-            
-            // Outer & Inner Gold Borders
-            doc.setDrawColor(212, 175, 55); doc.setLineWidth(1.5); doc.rect(10, 10, 190, 185);
-            doc.setLineWidth(0.5); doc.rect(12, 12, 186, 181);
-            
-            // App Logo
-            const logoEl = document.getElementById('logo-img');
-            if (logoEl && logoEl.complete && logoEl.naturalHeight !== 0) { try { doc.addImage(logoEl, 'PNG', 85, 15, 40, 30); } catch(e) {} }
-            
-            // Headers
-            doc.setFont("helvetica", "bold"); doc.setFontSize(26); doc.setTextColor(212, 175, 55);
-            doc.text("MAA MANGALA CLUB", 105, 55, null, null, "center");
-            doc.setFont("helvetica", "normal"); doc.setFontSize(11); doc.setTextColor(100, 100, 100);
-            doc.text("Totasahi, At/Po- Bagalpur, Dist- Jagatsinghpur, PIN- 754102, Odisha", 105, 63, null, null, "center");
-            doc.setDrawColor(220, 220, 220); doc.line(20, 70, 190, 70);
-            
-            // Title
-            doc.setFont("helvetica", "bold"); doc.setFontSize(18); doc.setTextColor(30, 30, 30);
-            doc.text("OFFICIAL DONATION RECEIPT", 105, 82, null, null, "center");
-            
-            // Metadata (Date, Receipt No, Financial Year)
-            let d = new Date(time);
-            doc.setFontSize(11); doc.setFont("helvetica", "normal"); doc.setTextColor(80, 80, 80);
-            doc.text("Date: " + d.toLocaleDateString('en-IN'), 20, 95);
-            doc.text("Receipt No: MMC-" + time.toString().slice(-6), 135, 95);
-            doc.setFont("helvetica", "bold");
-            doc.text("Financial Year: " + year, 20, 102);
-            doc.setFont("helvetica", "normal");
-            
-            // Donor Name
-            doc.setFontSize(13); doc.setTextColor(50, 50, 50);
-            doc.text("Received with gratitude from:", 20, 115);
-            doc.setFontSize(22); doc.setFont("helvetica", "bold"); doc.setTextColor(212, 175, 55);
-            doc.text(donorName.toUpperCase(), 20, 125);
-            
-            if(phone) { doc.setFontSize(11); doc.setFont("helvetica", "normal"); doc.setTextColor(120, 120, 120); doc.text("Contact No: " + phone, 20, 133); }
-            
-            // Amount & Category
-            let safeCategory = category.includes('(') ? category.split('(')[1].replace(')', '') : category;
-            doc.setFontSize(13); doc.setFont("helvetica", "normal"); doc.setTextColor(80, 80, 80);
-            doc.text("Towards Category : " + safeCategory, 20, 142);
-
-            doc.setFontSize(14); doc.setFont("helvetica", "normal"); doc.setTextColor(30, 30, 30);
-            doc.text("A sum of Rupees : ", 20, 152);
-            doc.setFont("helvetica", "bold"); doc.setTextColor(212, 175, 55);
-            doc.text("Rs. " + amount.toLocaleString('en-IN') + " /-", 65, 152);
-            
-            // Greetings Message
-            doc.setFont("helvetica", "italic"); doc.setFontSize(12); doc.setTextColor(180, 140, 40);
-            doc.text("May Maa Mangala bless you and your family with peace and prosperity.", 105, 166, null, null, "center");
-            doc.text("Thank you for your generous contribution!", 105, 172, null, null, "center");
-            
-            // Signature
-            doc.setTextColor(30, 30, 30); doc.setDrawColor(50, 50, 50); doc.line(140, 175, 185, 175);
-            doc.setFont("helvetica", "normal"); doc.setFontSize(10); 
-            doc.text("Manager (ABANISH DAS)", 141, 180); doc.text("Authorized Signature", 145, 185);
-            
-            doc.save(`MMC_Receipt_${year}_${donorName}.pdf`);
+        function moveToTrash(id) {
+            db.ref('records/' + id).once('value', snap => {
+                db.ref('deleted_records/' + id).set({...snap.val(), deletedAt: Date.now()}).then(() => db.ref('records/' + id).remove());
+            });
         }
 
-        function deleteRecord(id) { if(confirm("Permanently delete this record? This action cannot be undone.")) { db.ref('records/' + id).remove(); } }
+        function loadDeletedRecords() {
+            db.ref('deleted_records').on('value', snap => {
+                const list = document.getElementById('deleted-list'); list.innerHTML = "";
+                snap.forEach(child => {
+                    list.innerHTML += `<tr><td>${child.val().desc}</td><td>₹${child.val().amount}</td><td><button class="btn-sm btn-del" onclick="db.ref('deleted_records/${child.key}').remove()">Clear</button></td></tr>`;
+                });
+            });
+        }
+
+        function fetchMembers() {
+            db.ref('members').on('value', snap => {
+                const list = document.getElementById('members-list'); const drop = document.getElementById('memberSelect');
+                list.innerHTML = ""; drop.innerHTML = '<option value="guest">Other</option>';
+                snap.forEach(child => {
+                    list.innerHTML += `<tr><td>${child.val().name}</td><td>${child.val().phone}</td><td><button class="btn-sm btn-del" onclick="db.ref('members/${child.key}').remove()">Del</button></td></tr>`;
+                    drop.innerHTML += `<option value="${child.val().phone}">${child.val().name}</option>`;
+                });
+            });
+        }
+
+        function addMember() {
+            db.ref('members/' + document.getElementById('newMemPhone').value).set({ name: document.getElementById('newMemName').value, phone: document.getElementById('newMemPhone').value });
+        }
+
         function logout() { localStorage.clear(); location.reload(); }
     </script>
 </body>
